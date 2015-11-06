@@ -1,0 +1,54 @@
+=encoding utf8
+
+=for HTML <a href="https://travis-ci.org/zoffixznet/perl6-Color"><img src="https://travis-ci.org/zoffixznet/perl6-Color.svg?branch=master"></a>
+
+=head1 NAME
+
+Color - Format conversion and math operations on colours
+
+=head1 SYNOPSIS
+
+    use Color;
+
+    my $white        = Color.new(255, 255, 255);
+    my $almost_black = Color.new('#111');
+
+    my $gray = $white / 2;
+    say $gray.hex; # prints "#808080"
+
+    say $almost_black + 25; # prints "42, 42, 42"
+
+=head1 DESCRIPTION
+
+This module allows you to perform mathematical operations on RGB colour tuples,
+as well as convert them into other colour formats, like hex.
+
+=head1 METHODS
+
+=head2 C<new>
+
+    my $rgb = Color.new;
+
+Creates new C<Color> object.
+
+=head1 REPOSITORY
+
+Fork this module on GitHub:
+L<https://github.com/zoffixznet/perl6-Color>
+
+=head1 BUGS
+
+To report bugs or request features, please use
+L<https://github.com/zoffixznet/perl6-Color/issues>
+
+=head1 AUTHOR
+
+Zoffix Znet L<http://zoffix.com/>
+
+=head1 LICENSE
+
+You can use and distribute this module under the same terms as Perl 6
+itself. See the C<LICENSE> file included in this distribution for complete
+details.
+
+=cut
