@@ -39,3 +39,9 @@ multi infix:<+> (RGB $obj1, RGB $obj2) is export {
 
 # See conversion formulas for CYMK and others here:
 # http://www.rapidtables.com/convert/color/cmyk-to-rgb.htm
+
+# ◐	9680	25D0	 	CIRCLE WITH LEFT HALF BLACK
+# ◑	9681	25D1	 	CIRCLE WITH RIGHT HALF BLACK
+# my $lighter = RGB.new('ccc') ◐ 10;
+# my $lighter = RGB.new('ccc') ◑ 10;
+# my $lighter = RGB.new('ccc') + 22.5;
