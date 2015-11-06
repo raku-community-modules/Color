@@ -91,15 +91,15 @@ subtest {
     is $c.a, 255, 'alpha is correct';
 }, ".new( rgb => [22, 42, 72] )";
 
-diag 'RGB tuple (percent form)';
+diag 'RGB tuple (decimal form)';
 subtest {
-    my $c = Color.new( rgbp => [.086, .165, .282] );
+    my $c = Color.new( rgbd => [.086, .165, .282] );
     isa-ok $c, 'Color';
     is $c.r, 22 'red is correct';
     is $c.g, 42, 'green is correct';
     is $c.b, 72, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
-}, ".new( rgbp => [.086, .165, .282] )";
+}, ".new( rgbd => [.086, .165, .282] )";
 
 diag 'RGBA tuple';
 subtest {
@@ -111,15 +111,15 @@ subtest {
     is $c.a, 88, 'alpha is correct';
 }, ".new( rgba => [ 22, 42, 72, 88 ] )";
 
-diag 'RGBA tuple (percent form)';
+diag 'RGBA tuple (decimal form)';
 subtest {
-    my $c = Color.new( rgbap => [ .086, .165, .282, .345 ] );
+    my $c = Color.new( rgbad => [ .086, .165, .282, .345 ] );
     isa-ok $c, 'Color';
     is $c.r, 22 'red is correct';
     is $c.g, 42, 'green is correct';
     is $c.b, 72, 'blue is correct';
     is $c.a, 88, 'alpha is correct';
-}, ".new( rgbap => [ .086, .165, .282, .345 ] )";
+}, ".new( rgbad => [ .086, .165, .282, .345 ] )";
 
 diag 'CYMK tuple';
 subtest {

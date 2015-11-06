@@ -28,12 +28,31 @@ subtest {
 }, 'hex';
 
 subtest {
-    dies-ok { Color.new( hex => 'foobar') },
-        'die on string instead of hex chars';
-    dies-ok { Color.new( hex => 'fa') },
-        'die on too few hex chars';
-    dies-ok { Color.new( hex => 'faaaaaaaaaaaaaaa') },
-        'die on too many hex chars';
-}, 'hex';
+    dies-ok { Color.new(rgb => [22, 42]) },
+        'die on too few colours';
+    dies-ok { Color.new(rgb => [22, 42, 45, 46]) },
+        'die on too many colours';
+}, 'RGB Tuple';
+
+subtest {
+    dies-ok { Color.new(rgbd => [.5, .5]) },
+        'die on too few colours';
+    dies-ok { Color.new(rgbd => [.5, .5, .5, .5]) },
+        'die on too many colours';
+}, 'RGB Tuple (decimal form)';
+
+subtest {
+    dies-ok { Color.new(rgba => [22, 42]) },
+        'die on too few colours';
+    dies-ok { Color.new(rgba => [22, 42, 45, 46, 48]) },
+        'die on too many colours';
+}, 'RGBA Tuple';
+
+subtest {
+    dies-ok { Color.new(rgbad => [.5, .5]) },
+        'die on too few colours';
+    dies-ok { Color.new(rgbad => [.5, .5, .5, .5, .5]) },
+        'die on too many colours';
+}, 'RGBA Tuple (decimal form)';
 
 done-testing;
