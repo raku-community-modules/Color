@@ -13,23 +13,23 @@ class class Color:version<1.001001> {
     }
 };
 
-multi infix:<+> (RGB $obj, Int $n) is export {
+multi infix:<+> (Color $obj, Int $n) is export {
     RGB.new(
         r => $obj.r + $n,
         g => $obj.g + $n,
-        b => $obj.b + $n
+        b => $obj.b + $n,
     );
 }
 
-multi infix:<+> (Int $n, RGB $obj) is export {
+multi infix:<+> (Int $n, Color $obj) is export {
     RGB.new(
         r => $obj.r + $n,
         g => $obj.g + $n,
-        b => $obj.b + $n
+        b => $obj.b + $n,
     );
 }
 
-multi infix:<+> (RGB $obj1, RGB $obj2) is export {
+multi infix:<+> (Color $obj1, Color $obj2) is export {
     RGB.new(
         r => $obj1.r + $obj2.r,
         g => $obj1.g + $obj2.g,
