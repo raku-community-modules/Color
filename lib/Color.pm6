@@ -36,3 +36,6 @@ multi infix:<+> (RGB $obj1, RGB $obj2) is export {
         b => $obj1.b + $obj2.b,
     );
 }
+
+# See conversion formulas for CYMK and others here:
+# http://www.rapidtables.com/convert/color/cmyk-to-rgb.htm

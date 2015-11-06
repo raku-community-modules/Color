@@ -1,0 +1,39 @@
+#!perl6
+
+use v6;
+use Test;
+use lib 'lib';
+use Color;
+
+subtest {
+    dies-ok { Color.new('foobar') }, 'die on string instead of hex chars';
+    dies-ok { Color.new('fa')     }, 'die on too few hex chars';
+    dies-ok { Color.new('faaaaaaaaaaaaaaa') }, 'die on too many hex chars';
+}, 'hex, positional form';
+
+subtest {
+    dies-ok { Color.new(2) }, 'die on too few positionals';
+    dies-ok { Color.new(2, 3, 4, 5, 6, 7) }, 'die on too many positionals';
+}, 'numbers, positional form';
+
+diag 'Key-value forms';
+
+subtest {
+    dies-ok { Color.new( hex => 'foobar') },
+        'die on string instead of hex chars';
+    dies-ok { Color.new( hex => 'fa') },
+        'die on too few hex chars';
+    dies-ok { Color.new( hex => 'faaaaaaaaaaaaaaa') },
+        'die on too many hex chars';
+}, 'hex';
+
+subtest {
+    dies-ok { Color.new( hex => 'foobar') },
+        'die on string instead of hex chars';
+    dies-ok { Color.new( hex => 'fa') },
+        'die on too few hex chars';
+    dies-ok { Color.new( hex => 'faaaaaaaaaaaaaaa') },
+        'die on too many hex chars';
+}, 'hex';
+
+done-testing;
