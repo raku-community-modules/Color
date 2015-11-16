@@ -178,19 +178,19 @@ diag 'RGBA tuple (decimal form)';
 subtest {
     my $c = Color.new( rgbad => [ .086, .165, .282, .345 ] );
     isa-ok $c, 'Color';
-    is $c.r, 22, 'red is correct';
-    is $c.g, 42, 'green is correct';
-    is $c.b, 72, 'blue is correct';
-    is $c.a, 88, 'alpha is correct';
+    is $c.r, 21.93, 'red is correct';
+    is $c.g, 42.075, 'green is correct';
+    is $c.b, 71.91, 'blue is correct';
+    is $c.a, 87.975, 'alpha is correct';
 }, ".new( rgbad => [ .086, .165, .282, .345 ] )";
 
 subtest {
     my $c = Color.new( :rgbad< .086 .165 .282 .345> );
     isa-ok $c, 'Color';
-    is $c.r, 22, 'red is correct';
-    is $c.g, 42, 'green is correct';
-    is $c.b, 72, 'blue is correct';
-    is $c.a, 88, 'alpha is correct';
+    is $c.r, 21.93, 'red is correct';
+    is $c.g, 42.075, 'green is correct';
+    is $c.b, 71.91, 'blue is correct';
+    is $c.a, 87.975, 'alpha is correct';
 }, ".new( :rgbad< .086 .165 .282 .345> )";
 
 diag 'CMYK tuple';

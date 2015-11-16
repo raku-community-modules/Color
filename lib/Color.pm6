@@ -4,12 +4,33 @@ class Color:version<1.001001> {
     has Real $.g = 0;
     has Real $.b = 0;
     has Real $.a = 255;
+    has Bool $.alpha-math = False;
 
     multi method new (Str:D $hex is copy) {
         $hex ~~ s/^ '#'//;
         $hex.chars == 3 and $hex ~~ s/(.)(.)(.)/$0$0$1$1$2$2/;
         my ( $r, $g, $b ) = map { :16($_) }, $hex.comb(/../);
         return self.bless(:$r, :$g, :$b);
+    }
+
+    multi method new ( Array() :$rgba where $_ ~~ [Real, Real, Real, Real] ) {
+        return self.bless(
+            r => $rgba[0],
+            g => $rgba[1],
+            b => $rgba[2],
+            a => $rgba[3],
+            alpha-math => True,
+        );
+    }
+
+    multi method new ( Array() :$rgbad where $_ ~~ [Real, Real, Real, Real] ) {
+        return self.bless(
+            r => $rgbad[0] * 255,
+            g => $rgbad[1] * 255,
+            b => $rgbad[2] * 255,
+            a => $rgbad[3] * 255,
+            alpha-math => True,
+        );
     }
 
     multi method new ( Array() :$cmyk where $_ ~~ [Real, Real, Real, Real] )
