@@ -4,7 +4,7 @@
 
 =head1 NAME
 
-Color - Format conversion and math operations on colours
+Color - Format conversion, manipulation of, and math operations on colours
 
 =head1 SYNOPSIS
 
@@ -18,10 +18,20 @@ Color - Format conversion and math operations on colours
 
     say $almost_black + 25; # prints "42, 42, 42"
 
+    my $lighter_pink = Color.new('#ED60A2').lighten(20);
+    my $lighter_pink = Color.new('#ED60A2') ◐ 20; # same as above
+
+    my $saturated_pink = Color.new('#ED60A2').saturate(20);
+    my $saturated_pink = Color.new('#ED60A2') 🞉 20; # same as above
+
+    # Create an inverted colour scheme:
+    $_ = .invert for @colours_in_my_colourscheme;
+
 =head1 DESCRIPTION
 
 This module allows you to perform mathematical operations on RGB colour tuples,
-as well as convert them into other colour formats, like hex.
+as well as convert them into other colour formats, like hex, and manipulate
+them by, for example, making them lighter, darker, or more or less saturated.
 
 =head1 METHODS
 
