@@ -12,11 +12,11 @@ class Color:version<1.001001> {
         return self.bless(:$r, :$g, :$b);
     }
 
-    multi method new ( List :$hsl where $_ ~~ [Real, Real, Real] ) {
+    multi method new ( Array() :$hsl where $_ ~~ [Real, Real, Real] ) {
         return self.bless( |hsl2rgb $hsl )
     }
 
-    multi method new ( List :$hsv where $_ ~~ [Real, Real, Real] ) {
+    multi method new ( Array() :$hsv where $_ ~~ [Real, Real, Real] ) {
         return self.bless( |hsv2rgb $hsv )
     }
 };
