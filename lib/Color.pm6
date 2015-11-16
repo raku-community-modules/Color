@@ -42,6 +42,9 @@ multi infix:<+> (Color $obj1, Color $obj2) is export {
 
 # ◐	9680	25D0	 	CIRCLE WITH LEFT HALF BLACK
 # ◑	9681	25D1	 	CIRCLE WITH RIGHT HALF BLACK
+# U+1F789 	🞉  EXTREMELY HEAVY WHITE CIRCLE
+# U+1F785 	🞅 	f0 9f 9e 85 	MEDIUM BOLD WHITE CIRCLE
+# 0xA1 ¡  	INVERTED EXCLAMATION MARK
 # my $lighter = RGB.new('ccc') ◐ 10;
 # my $lighter = RGB.new('ccc') ◑ 10;
 # my $lighter = RGB.new('ccc') + 22.5;
