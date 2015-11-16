@@ -145,9 +145,9 @@ diag 'HSV tuple';
 subtest {
     my $c = Color.new( hsv => [ 90, 60, 70] );
     isa-ok $c, 'Color';
-    is $c.r, 124, 'red is correct';
-    is $c.g, 178, 'green is correct';
-    is $c.b, 71, 'blue is correct';
+    is $c.r, 124.95, 'red is correct';
+    is $c.g, 178.5, 'green is correct';
+    is $c.b, 71.4, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
 }, ".new( hsv => [ 90, 60, 70] )";
 

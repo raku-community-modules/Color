@@ -1,9 +1,9 @@
 use v6;
 class Color:version<1.001001> {
-    has Int $.r = 0;
-    has Int $.g = 0;
-    has Int $.b = 0;
-    has Int $.a = 255;
+    has Real $.r = 0;
+    has Real $.g = 0;
+    has Real $.b = 0;
+    has Real $.a = 255;
 
     multi method new (Str:D $hex is copy) {
         $hex ~~ s/^ '#'//;
@@ -28,7 +28,6 @@ sub hsv2rgb ( @ ($h is copy, $s is copy, $v is copy) ){
     my $c = $v * $s;
     my $x = $c * (1 - abs( (($h/60) % 2) - 1 ) );
     my $m = $v - $c;
-    say [$c, $x, $m];
     my ( $r, $g, $b );
     given $h {
         when   0..^60  { ($r, $g, $b) = ($c, $x, 0) }
@@ -38,9 +37,10 @@ sub hsv2rgb ( @ ($h is copy, $s is copy, $v is copy) ){
         when 240..^300 { ($r, $g, $b) = ($x, 0, $c) }
         when 300..^360 { ($r, $g, $b) = ($c, 0, $x) }
     }
-    say [$c, $x, $m];
-    say [r => $r, g => $g, b => $b];
-    return r => $r, g => $g, b => $b;
+    $r = ($r+$m) * 255;
+    $g = ($g+$m) * 255;
+    $b = ($b+$m) * 255;
+    return %(r => $r, g => $g, b => $b);
 }
 
 sub clip-to ($min, $v is rw, $max) { $v = ($min max $v) min $max }
