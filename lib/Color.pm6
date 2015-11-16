@@ -6,30 +6,56 @@ class Color:version<1.001001> {
     has Real $.a = 255;
     has Bool $.alpha-math = False;
 
-    multi method new (Str:D $hex is copy) {
-        $hex ~~ s/^ '#'//;
-        $hex.chars == 3 and $hex ~~ s/(.)(.)(.)/$0$0$1$1$2$2/;
-        my ( $r, $g, $b ) = map { :16($_) }, $hex.comb(/../);
-        return self.bless(:$r, :$g, :$b);
+    # multi method new (Str:D $hex is copy) {
+    #     $hex ~~ s/^ '#'//;
+    #     $hex.chars == 3 and $hex ~~ s/(.)(.)(.)/$0$0$1$1$2$2/;
+    #     my ( $r, $g, $b ) = map { :16($_) }, $hex.comb(/../);
+    #     return self.bless(:$r, :$g, :$b);
+    # }
+
+    multi method new (Str:D $hex is copy where 8 <= .chars <= 9 ) {
+        return self.bless( :alpha-math, |parse-hex $hex );
+    }
+
+    multi method new (Str:D $hex is copy where 3 <= .chars <= 7 ) {
+        return self.bless( |parse-hex $hex );
+    }
+
+    multi method new (Str:D :$hex) { return Color.new($hex); }
+
+    multi method new ( Array() :$rgb where $_ ~~ [Real, Real, Real] ) {
+        clip-to 0, $_, 255 for @$rgb;
+        return self.bless( r => $rgb[0], g => $rgb[1], b => $rgb[2] );
+    }
+
+    multi method new ( Array() :$rgbd where $_ ~~ [Real, Real, Real] ) {
+        clip-to 0, $_, 1 for @$rgbd;
+        return self.bless(
+            r => $rgbd[0] * 255,
+            g => $rgbd[1] * 255,
+            b => $rgbd[2] * 255,
+        );
     }
 
     multi method new ( Array() :$rgba where $_ ~~ [Real, Real, Real, Real] ) {
+        clip-to 0, $_, 255 for @$rgba;
         return self.bless(
             r => $rgba[0],
             g => $rgba[1],
             b => $rgba[2],
             a => $rgba[3],
-            alpha-math => True,
+            :alpha-math,
         );
     }
 
     multi method new ( Array() :$rgbad where $_ ~~ [Real, Real, Real, Real] ) {
+        clip-to 0, $_, 1 for @$rgbad;
         return self.bless(
             r => $rgbad[0] * 255,
             g => $rgbad[1] * 255,
             b => $rgbad[2] * 255,
             a => $rgbad[3] * 255,
-            alpha-math => True,
+            :alpha-math,
         );
     }
 
@@ -98,6 +124,18 @@ sub rgb-from-c-x-m ($h, $c, $x, $m) {
     }
     ( $r, $g, $b ) = map { ($_+$m) * 255 }, $r, $g, $b;
     return %(r => $r, g => $g, b => $b);
+}
+
+##############################################################################
+# Utilities
+##############################################################################
+
+sub parse-hex (Str:D $hex is copy) {
+    $hex ~~ s/^ '#'//;
+    3 <= $hex.chars <= 4 and $hex ~~ s:g/(.)/$0$0/;
+    my ( $r, $g, $b, $a ) = map { :16($_) }, $hex.comb(/../);
+    $a //= 255;
+    return %( :$r, :$g, :$b, :$a );
 }
 
 sub clip-to ($min, $v is rw, $max) { $v = ($min max $v) min $max }

@@ -140,18 +140,18 @@ diag 'RGB tuple (decimal form)';
 subtest {
     my $c = Color.new( rgbd => [.086, .165, .282] );
     isa-ok $c, 'Color';
-    is $c.r, 22, 'red is correct';
-    is $c.g, 42, 'green is correct';
-    is $c.b, 72, 'blue is correct';
+    is $c.r, 21.93, 'red is correct';
+    is $c.g, 42.075, 'green is correct';
+    is $c.b, 71.91, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
 }, ".new( rgbd => [.086, .165, .282] )";
 
 subtest {
     my $c = Color.new( :rgbd<.086 .165 .282> );
     isa-ok $c, 'Color';
-    is $c.r, 22, 'red is correct';
-    is $c.g, 42, 'green is correct';
-    is $c.b, 72, 'blue is correct';
+    is $c.r, 21.93, 'red is correct';
+    is $c.g, 42.075, 'green is correct';
+    is $c.b, 71.91, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
 }, ".new( :rgbd<.086 .165 .282> )";
 
