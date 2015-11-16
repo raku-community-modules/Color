@@ -91,7 +91,7 @@ subtest {
     is $c.a, 255, 'alpha is correct';
 }, ".new( 22, 42, 72 )";
 
-diag 'CYMK tuple';
+diag 'CMYK tuple';
 subtest {
     my $c = Color.new( .55, .25, .85, .12 );
     isa-ok $c, 'Color';

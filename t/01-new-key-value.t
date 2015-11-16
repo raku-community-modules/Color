@@ -193,24 +193,24 @@ subtest {
     is $c.a, 88, 'alpha is correct';
 }, ".new( :rgbad< .086 .165 .282 .345> )";
 
-diag 'CYMK tuple';
+diag 'CMYK tuple';
 subtest {
-    my $c = Color.new( cymk => [.55, .25, .85, .12] );
+    my $c = Color.new( cmyk => [.55, .25, .85, .12] );
     isa-ok $c, 'Color';
-    is $c.r, 101, 'red is correct';
-    is $c.g, 168, 'green is correct';
-    is $c.b, 34, 'blue is correct';
+    is $c.r, 100.98, 'red is correct';
+    is $c.g, 168.3, 'green is correct';
+    is $c.b, 33.66, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
-}, ".new( cymk => [.55, .25, .85, .12] )";
+}, ".new( cmyk => [.55, .25, .85, .12] )";
 
 subtest {
-    my $c = Color.new( :cymk<.55 .25 .85 .12> );
+    my $c = Color.new( :cmyk<.55 .25 .85 .12> );
     isa-ok $c, 'Color';
-    is $c.r, 101, 'red is correct';
-    is $c.g, 168, 'green is correct';
-    is $c.b, 34, 'blue is correct';
+    is $c.r, 100.98, 'red is correct';
+    is $c.g, 168.3, 'green is correct';
+    is $c.b, 33.66, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
-}, ".new( :cymk<.55 .25 .85 .12> )";
+}, ".new( :cmyk<.55 .25 .85 .12> )";
 
 diag 'HSL tuple';
 subtest {

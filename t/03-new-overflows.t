@@ -51,12 +51,12 @@ subtest {
 }, "HSV overflow (bottom)";
 
 subtest {
-    my $c = Color.new( cymk => [ 2, 2, -2, -2 ] );
+    my $c = Color.new( cmyk => [ 2, 2, -2, -2 ] );
     isa-ok $c, 'Color';
     is $c.r, 0, 'red is correct';
     is $c.g, 0, 'green is correct';
     is $c.b, 255 'blue is correct';
     is $c.a, 255, 'alpha is correct';
-}, "CYMK overflow";
+}, "CMYK overflow";
 
 done-testing;

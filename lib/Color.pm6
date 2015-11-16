@@ -12,19 +12,28 @@ class Color:version<1.001001> {
         return self.bless(:$r, :$g, :$b);
     }
 
-    multi method new ( Array() :$hsl where $_ ~~ [Real, Real, Real] ) {
-        return self.bless( |hsl2rgb $hsl )
-    }
+    multi method new ( Array() :$cmyk where $_ ~~ [Real, Real, Real, Real] )
+    { return self.bless( |cmyk2rgb $cmyk ) }
 
-    multi method new ( Array() :$hsv where $_ ~~ [Real, Real, Real] ) {
-        return self.bless( |hsv2rgb $hsv )
-    }
+    multi method new ( Array() :$hsl where $_ ~~ [Real, Real, Real] )
+    { return self.bless( |hsl2rgb $hsl ) }
+
+    multi method new ( Array() :$hsv where $_ ~~ [Real, Real, Real] )
+    { return self.bless( |hsv2rgb $hsv ) }
 };
 
 ##############################################################################
 # Conversion formulas
 # The math was taken from http://www.rapidtables.com/
 ##############################################################################
+
+sub cmyk2rgb ( @ ($c is copy, $m is copy, $y is copy, $k is copy) ) {
+    clip-to 0, $_, 1 for $c, $m, $y, $k;
+    my $r = 255 * (1-$c) * (1-$k);
+    my $g = 255 * (1-$m) * (1-$k);
+    my $b = 255 * (1-$y) * (1-$k);
+    return %(r => $r, g => $g, b => $b);
+}
 
 sub hsl2rgb ( @ ($h is copy, $s is copy, $l is copy) ){
     $s /= 100;
@@ -100,7 +109,7 @@ multi infix:<+> (Color $obj1, Color $obj2) is export {
     );
 }
 
-# See conversion formulas for CYMK and others here:
+# See conversion formulas for CMYK and others here:
 # http://www.rapidtables.com/convert/color/cmyk-to-rgb.htm
 
 # ◐	9680	25D0	 	CIRCLE WITH LEFT HALF BLACK
