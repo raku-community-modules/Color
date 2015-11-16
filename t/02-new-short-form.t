@@ -85,7 +85,7 @@ diag 'RGB tuple';
 subtest {
     my $c = Color.new( 22, 42, 72 );
     isa-ok $c, 'Color';
-    is $c.r, 22 'red is correct';
+    is $c.r, 22, 'red is correct';
     is $c.g, 42, 'green is correct';
     is $c.b, 72, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
@@ -95,9 +95,9 @@ diag 'CMYK tuple';
 subtest {
     my $c = Color.new( .55, .25, .85, .12 );
     isa-ok $c, 'Color';
-    is $c.r, 101 'red is correct';
-    is $c.g, 168, 'green is correct';
-    is $c.b, 34, 'blue is correct';
+    is $c.r, 100.98, 'red is correct';
+    is $c.g, 168.3, 'green is correct';
+    is $c.b, 33.66, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
 }, ".new( .55, .25, .85, .12 )";
 

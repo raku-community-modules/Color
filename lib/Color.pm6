@@ -6,12 +6,13 @@ class Color:version<1.001001> {
     has Real $.a = 255;
     has Bool $.alpha-math = False;
 
-    # multi method new (Str:D $hex is copy) {
-    #     $hex ~~ s/^ '#'//;
-    #     $hex.chars == 3 and $hex ~~ s/(.)(.)(.)/$0$0$1$1$2$2/;
-    #     my ( $r, $g, $b ) = map { :16($_) }, $hex.comb(/../);
-    #     return self.bless(:$r, :$g, :$b);
-    # }
+    multi method new (Real:D $c, Real:D $m, Real:D $y, Real:D $k, ) {
+        return Color.new( cmyk => [ $c, $m, $y, $k ] );
+    }
+
+    multi method new (Real:D $r, Real:D $g, Real:D $b ) {
+        return self.bless(:$r, :$g, :$b);
+    }
 
     multi method new (Str:D $hex is copy where 8 <= .chars <= 9 ) {
         return self.bless( :alpha-math, |parse-hex $hex );
