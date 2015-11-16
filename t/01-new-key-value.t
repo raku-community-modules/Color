@@ -85,7 +85,7 @@ diag 'RGB tuple';
 subtest {
     my $c = Color.new( rgb => [22, 42, 72] );
     isa-ok $c, 'Color';
-    is $c.r, 22 'red is correct';
+    is $c.r, 22, 'red is correct';
     is $c.g, 42, 'green is correct';
     is $c.b, 72, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
@@ -95,7 +95,7 @@ diag 'RGB tuple (decimal form)';
 subtest {
     my $c = Color.new( rgbd => [.086, .165, .282] );
     isa-ok $c, 'Color';
-    is $c.r, 22 'red is correct';
+    is $c.r, 22, 'red is correct';
     is $c.g, 42, 'green is correct';
     is $c.b, 72, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
@@ -105,7 +105,7 @@ diag 'RGBA tuple';
 subtest {
     my $c = Color.new( rgba => [ 22, 42, 72, 88 ] );
     isa-ok $c, 'Color';
-    is $c.r, 22 'red is correct';
+    is $c.r, 22, 'red is correct';
     is $c.g, 42, 'green is correct';
     is $c.b, 72, 'blue is correct';
     is $c.a, 88, 'alpha is correct';
@@ -115,7 +115,7 @@ diag 'RGBA tuple (decimal form)';
 subtest {
     my $c = Color.new( rgbad => [ .086, .165, .282, .345 ] );
     isa-ok $c, 'Color';
-    is $c.r, 22 'red is correct';
+    is $c.r, 22, 'red is correct';
     is $c.g, 42, 'green is correct';
     is $c.b, 72, 'blue is correct';
     is $c.a, 88, 'alpha is correct';
@@ -125,7 +125,7 @@ diag 'CYMK tuple';
 subtest {
     my $c = Color.new( cymk => [.55, .25, .85, .12] );
     isa-ok $c, 'Color';
-    is $c.r, 101 'red is correct';
+    is $c.r, 101, 'red is correct';
     is $c.g, 168, 'green is correct';
     is $c.b, 34, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
@@ -135,7 +135,7 @@ diag 'HSL tuple';
 subtest {
     my $c = Color.new( hsl => [ 72, 78, 65] );
     isa-ok $c, 'Color';
-    is $c.r, 207 'red is correct';
+    is $c.r, 207, 'red is correct';
     is $c.g, 235, 'green is correct';
     is $c.b, 96, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
@@ -145,7 +145,7 @@ diag 'HSV tuple';
 subtest {
     my $c = Color.new( hsv => [ 90, 60, 70] );
     isa-ok $c, 'Color';
-    is $c.r, 124 'red is correct';
+    is $c.r, 124, 'red is correct';
     is $c.g, 178, 'green is correct';
     is $c.b, 71, 'blue is correct';
     is $c.a, 255, 'alpha is correct';

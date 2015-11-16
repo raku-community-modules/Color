@@ -1,20 +1,52 @@
 use v6;
-class class Color:version<1.001001> {
+class Color:version<1.001001> {
     has Int $.r = 0;
     has Int $.g = 0;
     has Int $.b = 0;
     has Int $.a = 255;
 
-    method new (Str $hex is copy) {
+    multi method new (Str:D $hex is copy) {
         $hex ~~ s/^ '#'//;
         $hex.chars == 3 and $hex ~~ s/(.)(.)(.)/$0$0$1$1$2$2/;
         my ( $r, $g, $b ) = map { :16($_) }, $hex.comb(/../);
         return self.bless(:$r, :$g, :$b);
     }
+
+    multi method new (Array :$hsv where .elems == 3) {
+        return self.bless( |hsv2rgb $hsv )
+    }
 };
 
+sub hsv2rgb ( @ ($h is copy, $s is copy, $v is copy) ){
+    $s /= 100;
+    $v /= 100;
+    clip-to 0, $h, 359.999999;
+    clip-to 0, $s, 1;
+    clip-to 0, $v, 1;
+
+    # Formula cortesy of http://www.rapidtables.com/convert/color/hsv-to-rgb.htm
+    my $c = $v * $s;
+    my $x = $c * (1 - abs( (($h/60) % 2) - 1 ) );
+    my $m = $v - $c;
+    say [$c, $x, $m];
+    my ( $r, $g, $b );
+    given $h {
+        when   0..^60  { ($r, $g, $b) = ($c, $x, 0) }
+        when  60..^120 { ($r, $g, $b) = ($x, $c, 0) }
+        when 120..^180 { ($r, $g, $b) = (0, $c, $x) }
+        when 180..^240 { ($r, $g, $b) = (0, $x, $c) }
+        when 240..^300 { ($r, $g, $b) = ($x, 0, $c) }
+        when 300..^360 { ($r, $g, $b) = ($c, 0, $x) }
+    }
+    say [$c, $x, $m];
+    say [r => $r, g => $g, b => $b];
+    return r => $r, g => $g, b => $b;
+}
+
+sub clip-to ($min, $v is rw, $max) { $v = ($min max $v) min $max }
+
 multi infix:<+> (Color $obj, Int $n) is export {
-    RGB.new(
+    Color.new(
         r => $obj.r + $n,
         g => $obj.g + $n,
         b => $obj.b + $n,
@@ -22,7 +54,7 @@ multi infix:<+> (Color $obj, Int $n) is export {
 }
 
 multi infix:<+> (Int $n, Color $obj) is export {
-    RGB.new(
+    Color.new(
         r => $obj.r + $n,
         g => $obj.g + $n,
         b => $obj.b + $n,
@@ -30,7 +62,7 @@ multi infix:<+> (Int $n, Color $obj) is export {
 }
 
 multi infix:<+> (Color $obj1, Color $obj2) is export {
-    RGB.new(
+    Color.new(
         r => $obj1.r + $obj2.r,
         g => $obj1.g + $obj2.g,
         b => $obj1.b + $obj2.b,
