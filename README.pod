@@ -4,7 +4,7 @@
 
 =head1 NAME
 
-Color - Format conversion, manipulation of, and math operations on colours
+Color - Format conversion, manipulation, and math operations on colours
 
 =head1 SYNOPSIS
 
