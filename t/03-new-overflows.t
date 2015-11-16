@@ -28,7 +28,7 @@ subtest {
     isa-ok $c, 'Color';
     is $c.r, 0, 'red is correct';
     is $c.g, 0, 'green is correct';
-    is $c.b, 0 'blue is correct';
+    is $c.b, 0, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
 }, "HSL overflow (bottom)";
 
@@ -36,8 +36,8 @@ subtest {
     my $c = Color.new( hsv => [ 370, 200, 200 ] );
     isa-ok $c, 'Color';
     is $c.r, 255, 'red is correct';
-    is $c.g, 255, 'green is correct';
-    is $c.b, 4, 'blue is correct';
+    is $c.g, 0, 'green is correct';
+    is $c.b, 0.00000425, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
 }, "HSV overflow (top)";
 
@@ -46,7 +46,7 @@ subtest {
     isa-ok $c, 'Color';
     is $c.r, 0, 'red is correct';
     is $c.g, 0, 'green is correct';
-    is $c.b, 0 'blue is correct';
+    is $c.b, 0, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
 }, "HSV overflow (bottom)";
 
@@ -55,7 +55,7 @@ subtest {
     isa-ok $c, 'Color';
     is $c.r, 0, 'red is correct';
     is $c.g, 0, 'green is correct';
-    is $c.b, 255 'blue is correct';
+    is $c.b, 255, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
 }, "CMYK overflow";
 
