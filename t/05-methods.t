@@ -8,7 +8,7 @@ use Color;
 subtest {
     my $c = Color.new( hex => '#0abcde');
     isa-ok $c, 'Color';
-    can-ok $c, qw/
+    can-ok $c, $_, "can do $_" for qw/
         r  g  b  a  cmyk  hsl  hsv  rgb  rgba  rgbd  rgbad
         hex  hex3  hex8  darken  lighten
     /;
@@ -24,7 +24,8 @@ subtest {
 
 subtest {
     my $c = Color.new( hex => '#0abcde');
-    is-deeply $c.cmyk,  [.955, .153, 0, .129], 'cmyk';
+    is-deeply $c.cmyk,  {:c(<106/111>), :m(<17/111>), :y(0.0), :k(<11/85>)},
+        'cmyk';
     is-deeply $c.hsl,   [190, 91.4, 45.5],     'hsl';
     is-deeply $c.hsv,   [190, 95.5, 87.1],     'hsv';
     is-deeply $c.rgb,   [10, 188, 222],        'rgb';

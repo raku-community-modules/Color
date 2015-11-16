@@ -1,11 +1,15 @@
 use v6;
 class Color:version<1.001001> {
-    has Real $.r = 0;
-    has Real $.g = 0;
-    has Real $.b = 0;
-    has Real $.a = 255;
+    subset ValidRGB of Real where 0 <= $_ <= 255;
+    has ValidRGB $.r = 0;
+    has ValidRGB $.g = 0;
+    has ValidRGB $.b = 0;
+    has ValidRGB $.a = 255;
     has Bool $.alpha-math = False;
 
+    ##########################################################################
+    # Call forms
+    ##########################################################################
     proto method new(|) { * }
 
     multi method new (Real:D $c, Real:D $m, Real:D $y, Real:D $k, ) {
@@ -70,6 +74,12 @@ class Color:version<1.001001> {
 
     multi method new ( Array() :$hsv where $_ ~~ [Real, Real, Real] )
     { return self.bless( |hsv2rgb $hsv ) }
+
+    ##########################################################################
+    # Methods
+    ##########################################################################
+    method cmyk () { return rgb2cmyk $.r, $.g, $.b; }
+    method hsl  () { return rgb2hsl  $.r, $.g, $.b; }
 };
 
 ##############################################################################
@@ -77,12 +87,45 @@ class Color:version<1.001001> {
 # The math was taken from http://www.rapidtables.com/
 ##############################################################################
 
+sub rgb2hsl ( $r is copy, $g is copy, $b is copy ) {
+    $_ /= 255 for $r, $g, $b;
+
+    # Formula cortesy http://www.rapidtables.com/convert/color/rgb-to-hsl.htm
+    my $c_max = max $r, $g, $b;
+    my $c_min = min $r, $g, $b;
+    my \Δ = $c_max - $c_min;
+
+    my $h = Δ == 0 ?? 0 !! do {
+        given $c_max {
+            when $r { 60 * ( ($g - $b)/Δ % 6 ) }
+            when $g { 60 * ( ($b - $r)/Δ + 2 ) }
+            when $b { 60 * ( ($r - $g)/Δ + 4 ) }
+        }
+    };
+
+    my $l = Δ / 2;
+    my $s = Δ / (1 - abs(2*$l - 1));
+
+    return %(:$h, :$s, :$l);
+}
+
+sub rgb2cmyk ( $r is copy, $g is copy, $b is copy ) {
+    $_ /= 255 for $r, $g, $b;
+
+    # Formula cortesy http://www.rapidtables.com/convert/color/rgb-to-cmyk.htm
+    my $k = 1 - max $r, $g, $b;
+    my $c = (1 - $r - $k) / (1 - $k);
+    my $m = (1 - $g - $k) / (1 - $k);
+    my $y = (1 - $b - $k) / (1 - $k);
+    return %(c => $c, m => $m, y => $y, k => $k);
+}
+
 sub cmyk2rgb ( @ ($c is copy, $m is copy, $y is copy, $k is copy) ) {
     clip-to 0, $_, 1 for $c, $m, $y, $k;
     my $r = 255 * (1-$c) * (1-$k);
     my $g = 255 * (1-$m) * (1-$k);
     my $b = 255 * (1-$y) * (1-$k);
-    return %(r => $r, g => $g, b => $b);
+    return %(:$r, :$g, :$b);
 }
 
 sub hsl2rgb ( @ ($h is copy, $s is copy, $l is copy) ){
