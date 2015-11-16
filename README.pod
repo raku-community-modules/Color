@@ -12,11 +12,11 @@ Color - Format conversion, manipulation, and math operations on colours
 
     my $white        = Color.new(255, 255, 255);
     my $almost_black = Color.new('#111');
-
     my $gray = $white / 2;
     say $gray.hex; # prints "#808080"
-
     say $almost_black + 25; # prints "42, 42, 42"
+
+    say Color.new(:hsv<152 80 50>).hex; # convert HSV to HEX
 
     my $lighter_pink = Color.new('#ED60A2').lighten(20);
     my $lighter_pink = Color.new('#ED60A2') ◐ 20; # same as above

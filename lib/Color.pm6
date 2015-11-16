@@ -12,10 +12,35 @@ class Color:version<1.001001> {
         return self.bless(:$r, :$g, :$b);
     }
 
-    multi method new (Array :$hsv where .elems == 3) {
+    multi method new ( List :$hsl where $_ ~~ [Real, Real, Real] ) {
+        return self.bless( |hsl2rgb $hsl )
+    }
+
+    multi method new ( List :$hsv where $_ ~~ [Real, Real, Real] ) {
         return self.bless( |hsv2rgb $hsv )
     }
 };
+
+##############################################################################
+# Conversion formulas
+# The math was taken from http://www.rapidtables.com/
+##############################################################################
+
+sub hsl2rgb ( @ ($h is copy, $s is copy, $l is copy) ){
+    $s /= 100;
+    $l /= 100;
+    clip-to 0, $h, 359.999999;
+    clip-to 0, $s, 1;
+    clip-to 0, $l, 1;
+
+    # Formula cortesy of http://www.rapidtables.com/convert/color/hsl-to-rgb.htm
+    my $c = (1 - abs(2*$l - 1)) * $s;
+    my $x = $c * (
+        1 - abs( (($h/60) % 2) - 1 )
+    );
+    my $m = $l - $c/2;
+    return rgb-from-c-x-m( $h, $c, $x, $m );
+}
 
 sub hsv2rgb ( @ ($h is copy, $s is copy, $v is copy) ){
     $s /= 100;
@@ -28,7 +53,11 @@ sub hsv2rgb ( @ ($h is copy, $s is copy, $v is copy) ){
     my $c = $v * $s;
     my $x = $c * (1 - abs( (($h/60) % 2) - 1 ) );
     my $m = $v - $c;
-    my ( $r, $g, $b );
+    return rgb-from-c-x-m( $h, $c, $x, $m );
+}
+
+sub rgb-from-c-x-m ($h, $c, $x, $m) {
+    my ($r, $g, $b);
     given $h {
         when   0..^60  { ($r, $g, $b) = ($c, $x, 0) }
         when  60..^120 { ($r, $g, $b) = ($x, $c, 0) }
@@ -37,13 +66,15 @@ sub hsv2rgb ( @ ($h is copy, $s is copy, $v is copy) ){
         when 240..^300 { ($r, $g, $b) = ($x, 0, $c) }
         when 300..^360 { ($r, $g, $b) = ($c, 0, $x) }
     }
-    $r = ($r+$m) * 255;
-    $g = ($g+$m) * 255;
-    $b = ($b+$m) * 255;
+    ( $r, $g, $b ) = map { ($_+$m) * 255 }, $r, $g, $b;
     return %(r => $r, g => $g, b => $b);
 }
 
 sub clip-to ($min, $v is rw, $max) { $v = ($min max $v) min $max }
+
+##############################################################################
+# Custom operators
+##############################################################################
 
 multi infix:<+> (Color $obj, Int $n) is export {
     Color.new(
