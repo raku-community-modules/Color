@@ -1,9 +1,7 @@
 use v6;
 use Color;
 
-my $c = Color.new( rgba => [ 22, 42, 72, 88 ]);
-# my $c = Color.new(r	=> 0, g	=> 0.183333, b => 1);
-say [ 22, 42, 72, 88 ];
+my $c = Color.new(rgb => [22, 42]); #[0].^signature.perl.say;
 say [$c.r, $c.g, $c.b, $c.a];
 
 

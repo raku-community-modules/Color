@@ -6,6 +6,8 @@ class Color:version<1.001001> {
     has Real $.a = 255;
     has Bool $.alpha-math = False;
 
+    proto method new(|) { * }
+
     multi method new (Real:D $c, Real:D $m, Real:D $y, Real:D $k, ) {
         return Color.new( cmyk => [ $c, $m, $y, $k ] );
     }
