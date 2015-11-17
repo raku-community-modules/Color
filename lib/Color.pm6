@@ -78,8 +78,16 @@ class Color:version<1.001001> {
     ##########################################################################
     # Methods
     ##########################################################################
-    method cmyk () { return rgb2cmyk $.r, $.g, $.b; }
-    method hsl  () { return rgb2hsl  $.r, $.g, $.b; }
+    method cmyk  () { return rgb2cmyk $.r, $.g, $.b;                       }
+    method hsl   () { return rgb2hsl  $.r, $.g, $.b;                       }
+    method hsv   () { return rgb2hsv  $.r, $.g, $.b;                       }
+    method rgb   () { return $.r, $.g, $.b;                                }
+    method rgba  () { return $.r, $.g, $.b, $.a;                           }
+    method rgbd  () { return $.r/255, $.g/255, $.b/255;                    }
+    method rgbad () { return $.r/255, $.g/255, $.b/255, $.a/255;           }
+    method hex   () { return map { .base(16) }, $.r, $.g, $.b;             }
+    method hex3  () { return map { .base(16).substr(0,1) }, $.r, $.g, $.b; }
+    method hex8  () { return map { .base(16) }, $.r, $.g, $.b, $.a;        }
 };
 
 ##############################################################################
@@ -87,26 +95,22 @@ class Color:version<1.001001> {
 # The math was taken from http://www.rapidtables.com/
 ##############################################################################
 
+sub rgb2hsv ( $r is copy, $g is copy, $b is copy ) {
+    my ( $h, \Δ, $c_max ) = calc-hue( $r, $g, $b );
+
+    my $s = $c_max == 0 ?? 0 !! Δ / $c_max;
+    my $v = $c_max;
+
+    return ($h, $s, $v);
+}
+
 sub rgb2hsl ( $r is copy, $g is copy, $b is copy ) {
-    $_ /= 255 for $r, $g, $b;
-
-    # Formula cortesy http://www.rapidtables.com/convert/color/rgb-to-hsl.htm
-    my $c_max = max $r, $g, $b;
-    my $c_min = min $r, $g, $b;
-    my \Δ = $c_max - $c_min;
-
-    my $h = Δ == 0 ?? 0 !! do {
-        given $c_max {
-            when $r { 60 * ( ($g - $b)/Δ % 6 ) }
-            when $g { 60 * ( ($b - $r)/Δ + 2 ) }
-            when $b { 60 * ( ($r - $g)/Δ + 4 ) }
-        }
-    };
+    my ( $h, \Δ ) = calc-hue( $r, $g, $b );
 
     my $l = Δ / 2;
     my $s = Δ / (1 - abs(2*$l - 1));
 
-    return %(:$h, :$s, :$l);
+    return ($h, $s, $l);
 }
 
 sub rgb2cmyk ( $r is copy, $g is copy, $b is copy ) {
@@ -117,7 +121,7 @@ sub rgb2cmyk ( $r is copy, $g is copy, $b is copy ) {
     my $c = (1 - $r - $k) / (1 - $k);
     my $m = (1 - $g - $k) / (1 - $k);
     my $y = (1 - $b - $k) / (1 - $k);
-    return %(c => $c, m => $m, y => $y, k => $k);
+    return ($c, $m, $y, $k);
 }
 
 sub cmyk2rgb ( @ ($c is copy, $m is copy, $y is copy, $k is copy) ) {
@@ -175,6 +179,23 @@ sub rgb-from-c-x-m ($h, $c, $x, $m) {
 ##############################################################################
 # Utilities
 ##############################################################################
+
+sub calc-hue ($r is copy, $g is copy, $b is copy ) {
+    $_ /= 255 for $r, $g, $b;
+
+    my $c_max = max $r, $g, $b;
+    my $c_min = min $r, $g, $b;
+    my \Δ = $c_max - $c_min;
+
+    my $h = do given $c_max {
+        when Δ == 0 { 0                        }
+        when $r     { 60 * ( ($g - $b)/Δ % 6 ) }
+        when $g     { 60 * ( ($b - $r)/Δ + 2 ) }
+        when $b     { 60 * ( ($r - $g)/Δ + 4 ) }
+    };
+
+    return ($h, Δ, $c_max);
+}
 
 sub parse-hex (Str:D $hex is copy) {
     $hex ~~ s/^ '#'//;
