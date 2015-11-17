@@ -12,6 +12,7 @@ Color - Format conversion, manipulation, and math operations on colours
     my $white        = Color.new(255, 255, 255);
     my $almost_black = Color.new('#111');
     say Color.new(:hsv<152 80 50>).hex; # convert HSV to HEX
+    say "$white is way lighter than $almost_black";
 
     my $lighter_pink = Color.new('#ED60A2').lighten(20);
     my $lighter_pink = Color.new('#ED60A2') ◐ 20; # same as above
@@ -84,14 +85,7 @@ Boolean. Specifies whether operator math from C<Color::Operators> should affect
 the alpha channel. Colours contructed from RGBA automatically get this
 attribute set to C<True>, rest of formats have it set as C<False>.
 
-=head1 METHODS
-
-=head2 C<cmyk>
-
-    say $c.cmyk; # (<106/111>, <17/111>, 0.0, <11/85>)
-
-Converts the color to CMYK format and returns a list containing each color
-(ranging `0`..`1`).
+=head1 MANIPULATION METHODS
 
 =head2 C<darken>
 
@@ -107,25 +101,197 @@ argument.
 Creates a new C<Color> object that is desaturated by the percetange given as
 the argument.
 
+=head2 C<invert>
+
+    say $c.invert.cmyk;
+
+Creates a new C<Color> object that is inverted (black becomes white, etc).
+
+=head2 C<lighten>
+
+say $c.lighten(10).cmyk; # lighten by 10%
+
+Creates a new C<Color> object that is lightened by the percetange given as the
+argument.
+
+=head2 C<saturate>
+
+    say $c.saturate(20).cmyk;
+
+Creates a new C<Color> object that is saturated by the percetange given as
+the argument.
+
+=head1 CONVERSION METHODS
+
+=head2 C<to-string>
+
+    $c.to-string('cmyk'); #   cmyk(0.954955, 0.153153, 0, 0.129412)
+    $c.to-string('hsl');  #   hsl(189.622642, 91.379310, 45.490196)
+    $c.to-string('hsv');  #   hsv(189.622642, 95.495495, 87.058824)
+    $c.to-string('rgb');  #   rgb(10, 188, 222)
+    $c.to-string('rgba'); #   rgba(10, 188, 222, 255)
+    $c.to-string('rgbd'); #   rgb(0.039216, 0.737255, 0.870588)
+    $c.to-string('rgbad');#   rgba(0.039216, 0.737255, 0.870588, 1)
+    $c.to-string('hex');  #   #0ABCDE
+    $c.to-string('hex3'); #   #1CE
+    $c.to-string('hex8'); #   #0ABCDEFF
+
+Converts the color to the format given by the argument and returns a string
+representation of it. See above for the format of the tring for each
+color format.
+
+B<Note:> the C<.gist> and C<.Str> methods of the C<Color> object
+are equivalent to C<.to-string('hex')>.
+
+=head2 C<cmyk>
+
+    say $c.cmyk; # (<106/111>, <17/111>, 0.0, <11/85>)
+
+Converts the color to CMYK format and returns a list containing each color
+(ranging `0`..`1`).
+
 =head2 C<hex>
 
     say $c.hex; #  (0A BC DE);
 
 Returns a list of 3 2-digit hex numbers representing the color.
 
-hex
-hex3
-hex8
-hsl
-hsv
-invert
-lighten
-rgb
-rgba
-rgbad
-rgbd
-saturate
-to-string
+=head2 C<hex3>
+
+    say $c.hex; #  (1 C E);
+
+Returns a list of 3 1-digit hex numbers representing the color. They will
+be rounded and they need to be doubled (i.e. the above would be C<11CCEE>)
+to get the actual value.
+
+=head2 C<hex>
+
+    say $c.hex8; #  (0A BC DE FF);
+
+Returns a list of 4 2-digit hex numbers representing the color, including
+the Alpha space.
+
+=head2 C<hsl>
+
+    say $c.hsl; # (<10050/53>, <10600/111>, <1480/17>),
+
+Converts the colour to HSL format and returns the three values
+(hue, saturation, lightness). The S/L are returned as percentages, not decimals,
+so 50% saturation is returned as C<50>, not C<.5>.
+
+=head2 C<hsl>
+
+    say $c.hsv; # (<10050/53>, <10600/111>, <1480/17>),
+
+Converts the colour to HSV format and returns the three values
+(hue, saturation, value). The S/V are returned as percentages, not decimals,
+so 50% saturation is returned as C<50>, not C<.5>.
+
+=head2 C<rgb>
+
+    say $c.rgb; # (10, 188, 222)
+
+Converts the color to RGB format and returns a list of the three colours.
+
+=head2 C<rgba>
+
+    say $c.rgba; # (10, 188, 222, 255);
+
+Converts the color to RGBA format and returns a list of the three colours,
+and alpha channel.
+
+=head2 C<rgbd>
+
+    say $c.rgbd; # (<2/51>, <188/255>, <74/85>)
+
+Converts the color to RGB format ranging C<0>..C<1> and returns a list of
+the three colours.
+
+=head2 C<rgbad>
+
+    say $c.rgbad; # (<2/51>, <188/255>, <74/85>, 1.0)
+
+Converts the color to RGBA format ranging C<0>..C<1> and returns a list of
+the three colours, and alpha channel.
+
+=head1 CUSTOM OPERATORS
+
+To get these, you need to C<use Color::Operators> along with C<use Color>.
+
+=head2 C<+>
+
+    Color.new('424') + 10;
+    10 + Color.new('424');
+    Color.new('424') + Color.new('424');
+
+Add individual RGB values of each color. Plain numbers are added to each
+value. If L</alpha-math> is turned on, alpha channel is affected as well.
+The operation returns a new C<Color> object.
+
+=head2 C<->
+
+    Color.new('424') - 10;
+    10 - Color.new('424');
+    Color.new('424') - Color.new('666');
+
+Subtract individual RGB values of each color. Plain numbers are subtracted
+from each value. If L</alpha-math> is turned on, alpha channel is affected
+as well. The operation returns a new C<Color> object.
+
+=head2 C<*>
+
+    Color.new('424') * 10;
+    10 * Color.new('424');
+    Color.new('424') * Color.new('424');
+
+Multiply individual RGB values of each color. Plain numbers are multiplied
+with each value. If L</alpha-math> is turned on, alpha channel is affected
+as well. The operation returns a new C<Color> object.
+
+=head2 C</>
+
+    Color.new('424') / 10;
+    Color.new('424') / 0; # doesn't die; sets values to 0
+    10 / Color.new('424');
+    Color.new('424') / Color.new('424');
+
+Divide individual RGB values of each color. Plain numbers are divided
+with each value. If L</alpha-math> is turned on, alpha channel is affected
+as well. The operation returns a new C<Color> object. Illegal operation
+of division by zero, doesn't die and simply sets the value to C<0>.
+
+=head2 C<◐>
+
+    say $c ◐ 20; # lighten by 20%
+
+C<U+25D0 (e2 97 90): CIRCLE WITH LEFT HALF BLACK [◐]>. Same as C</lighten>
+
+=head2 C<◑>
+
+    say $c ◑ 20; # darken by 20%
+
+C<U+25D1 (e2 97 91): CIRCLE WITH RIGHT HALF BLACK [◑]>. Same as C</darken>
+
+=head2 C<🞉>
+
+    say $c 🞉 20; # saturate by 20%
+
+C<U+1F789 (f0 9f 9e 89): EXTREMELY HEAVY WHITE CIRCLE [🞉]>.
+Same as C</desaturate>
+
+=head2 C<¡>
+
+    say $c¡; # invert colour
+
+C<U+00A1 (c2 a1): INVERTED EXCLAMATION MARK [¡]>. Same as C</invert>
+
+=head1 STRINGIFICATION
+
+    say $c;
+    say "$c";
+
+The C<Color> object overrides C<.Str> and C<.gist> methods to be
+equivalent to C<.to-string('hex')>.
 
 =head1 REPOSITORY
 
@@ -140,6 +306,11 @@ L<https://github.com/zoffixznet/perl6-Color/issues>
 =head1 AUTHOR
 
 Zoffix Znet L<http://zoffix.com/>
+
+=head1 CONTRIBUTORS
+
+Thanks to timotimo++, jnthn++, psch++, RabidGravy++, ab5tract++, moritz++,
+and anyone else who I forgot who helped me with questions on IRC.
 
 =head1 LICENSE
 

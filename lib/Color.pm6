@@ -128,6 +128,9 @@ class Color:version<1.001001> {
             when * { fail "Invalid format ($type) to convert to specified"; }
         }
     }
+
+    method gist { return self.to-string('hex') };
+    method Str  { return self.to-string('hex') };
 };
 
 ##############################################################################
