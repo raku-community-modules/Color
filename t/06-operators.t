@@ -4,6 +4,7 @@ use v6;
 use Test;
 use lib 'lib';
 use Color;
+use Color::Operators;
 
 diag 'Operator tests on rgb nums';
 subtest {
@@ -11,46 +12,47 @@ subtest {
     my $c2 = Color.new( rgb => [ 10,  20,  30] );
     my $c3 = Color.new( rgb => [  2,   1,   2] );
 
-    is-deeply ($c1 + $c2).rgba, [120, 140, 160, 255], 'Color + Color';
-    is-deeply ($c1 + 10).rgba,  [120, 130, 140, 255], 'Color + number';
-    is-deeply (10 + $c1).rgba,  [120, 130, 140, 255], 'number + Color';
+    is-deeply ($c1 + $c2).rgba, (120, 140, 160, 255), 'Color + Color';
+    is-deeply ($c1 + 10).rgba,  (120, 130, 140, 255), 'Color + number';
+    is-deeply (10 + $c1).rgba,  (120, 130, 140, 255), 'number + Color';
 
-    is-deeply ($c1 - $c2).rgba, [100, 100, 100, 255], 'Color - Color';
-    is-deeply ($c1 - 10).rgba,  [100, 110, 120, 255], 'Color - number';
-    is-deeply (200 - $c1).rgba, [ 90,  80,  70, 255], 'number - Color';
+    is-deeply ($c1 - $c2).rgba, (100, 100, 100, 255), 'Color - Color';
+    is-deeply ($c1 - 10).rgba,  (100, 110, 120, 255), 'Color - number';
+    is-deeply (200 - $c1).rgba, ( 90,  80,  70, 255), 'number - Color';
 
-    is-deeply ($c1 / $c2).rgba, [11, 6, 4.333, 255],    'Color / Color';
-    is-deeply ($c1 / 10).rgba,  [11, 12, 13, 255],      'Color / number';
-    is-deeply (200 / $c2).rgba, [ 20,  10,  6.667, 255], 'number / Color';
-    is-deeply ($c1 / 0).rgba,   [ 0,  0,  0,  255],     'Color / 0 (no die)';
+    is-deeply ($c1 / $c2).rgba, (11, 6, 4, 255),    'Color / Color';
+    is-deeply ($c1 / 10).rgba,  (11, 12, 13, 255),      'Color / number';
+    is-deeply (200 / $c2).rgba, ( 20,  10,  7, 255), 'number / Color';
+    is-deeply ($c1 / 0).rgba,   ( 0,  0,  0,  255),     'Color / 0 (no die)';
 
-    is-deeply ($c1 * $c3).rgba, [220, 120, 255, 255], 'Color * Color';
-    is-deeply ($c2 * 10).rgba,  [100, 200, 255, 255], 'Color * number';
-    is-deeply (2 * $c2).rgba,   [ 20,  40,  60, 255], 'number * Color';
+    is-deeply ($c1 * $c3).rgba, (220, 120, 255, 255), 'Color * Color';
+    is-deeply ($c2 * 10).rgba,  (100, 200, 255, 255), 'Color * number';
+    is-deeply (2 * $c2).rgba,   ( 20,  40,  60, 255), 'number * Color';
 }, 'operator tests with rgb nums and alpha-math turned off [default]';
 
 diag 'Operator tests (alpha-math turned off on rgba nums)';
 subtest {
-    my $c1 = Color.new( rgba => [110, 120, 130, 140], alpha-math => False);
-    my $c2 = Color.new( rgba => [ 10,  20,  30,  40], alpha-math => False );
-    my $c3 = Color.new( rgba => [  2,   1,   2,   1], alpha-math => False );
+    my $c1 = Color.new( rgba => [110, 120, 130, 140]);
+    my $c2 = Color.new( rgba => [ 10,  20,  30,  40]);
+    my $c3 = Color.new( rgba => [  2,   1,   2,   1]);
+    .alpha-math = False for $c1, $c2, $c3;
 
-    is-deeply ($c1 + $c2).rgba, [120, 140, 160, 140], 'Color + Color';
-    is-deeply ($c1 + 10).rgba,  [120, 130, 140, 140], 'Color + number';
-    is-deeply (10 + $c1).rgba,  [120, 130, 140, 140], 'number + Color';
+    is-deeply ($c1 + $c2).rgba, (120, 140, 160, 140), 'Color + Color';
+    is-deeply ($c1 + 10).rgba,  (120, 130, 140, 140), 'Color + number';
+    is-deeply (10 + $c1).rgba,  (120, 130, 140, 140), 'number + Color';
 
-    is-deeply ($c1 - $c2).rgba, [100, 100, 100, 140], 'Color - Color';
-    is-deeply ($c1 - 10).rgba,  [100, 110, 120, 140], 'Color - number';
-    is-deeply (200 - $c1).rgba, [ 90,  80,  70, 140], 'number - Color';
+    is-deeply ($c1 - $c2).rgba, (100, 100, 100, 140), 'Color - Color';
+    is-deeply ($c1 - 10).rgba,  (100, 110, 120, 140), 'Color - number';
+    is-deeply (200 - $c1).rgba, ( 90,  80,  70, 140), 'number - Color';
 
-    is-deeply ($c1 / $c2).rgba, [11, 6, 4.333, 140],    'Color / Color';
-    is-deeply ($c1 / 10).rgba,  [11, 12, 13, 140],      'Color / number';
-    is-deeply (200 / $c2).rgba, [ 20,  10,  6.667, 40], 'number / Color';
-    is-deeply ($c1 / 0).rgba,   [ 0,  0,  0,  140],     'Color / 0 (no die)';
+    is-deeply ($c1 / $c2).rgba, (11, 6, 4, 140),    'Color / Color';
+    is-deeply ($c1 / 10).rgba,  (11, 12, 13, 140),      'Color / number';
+    is-deeply (200 / $c2).rgba, ( 20,  10,  7, 40), 'number / Color';
+    is-deeply ($c1 / 0).rgba,   ( 0,  0,  0,  140),     'Color / 0 (no die)';
 
-    is-deeply ($c1 * $c3).rgba, [220, 120, 255, 140], 'Color * Color';
-    is-deeply ($c2 * 10).rgba,  [100, 200, 255,  40], 'Color * number';
-    is-deeply (2 * $c2).rgba,   [ 20,  40,  60,  40], 'number * Color';
+    is-deeply ($c1 * $c3).rgba, (220, 120, 255, 140), 'Color * Color';
+    is-deeply ($c2 * 10).rgba,  (100, 200, 255,  40), 'Color * number';
+    is-deeply (2 * $c2).rgba,   ( 20,  40,  60,  40), 'number * Color';
 }, 'operator tests with rgba nums and alpha-math turned off';
 
 diag 'Try again with enabled alpha math';
@@ -59,46 +61,47 @@ subtest {
     my $c2 = Color.new( rgba => [ 10,  20,  30,  40] );
     my $c3 = Color.new( rgba => [  2,   1,   2,   1] );
 
-    is-deeply ($c1 + $c2).rgba, [120, 140, 160, 180], 'Color + Color';
-    is-deeply ($c1 + 10).rgba,  [120, 130, 140, 150], 'Color + number';
-    is-deeply (10 + $c1).rgba,  [120, 130, 140, 150], 'number + Color';
+    is-deeply ($c1 + $c2).rgba, (120, 140, 160, 180), 'Color + Color';
+    is-deeply ($c1 + 10).rgba,  (120, 130, 140, 150), 'Color + number';
+    is-deeply (10 + $c1).rgba,  (120, 130, 140, 150), 'number + Color';
 
-    is-deeply ($c1 - $c2).rgba, [100, 100, 100, 100], 'Color - Color';
-    is-deeply ($c1 - 10).rgba,  [100, 110, 120, 130], 'Color - number';
-    is-deeply (200 - $c1).rgba, [ 90,  80,  70,  60], 'number - Color';
+    is-deeply ($c1 - $c2).rgba, (100, 100, 100, 100), 'Color - Color';
+    is-deeply ($c1 - 10).rgba,  (100, 110, 120, 130), 'Color - number';
+    is-deeply (200 - $c1).rgba, ( 90,  80,  70,  60), 'number - Color';
 
-    is-deeply ($c1 / $c2).rgba, [11, 6, 4.333, 3.5],    'Color / Color';
-    is-deeply ($c1 / 10).rgba,  [11, 12, 13, 14],       'Color / number';
-    is-deeply (200 / $c2).rgba, [ 20,  10,  6.667,  5], 'number / Color';
-    is-deeply ($c1 / 0).rgba,   [ 0,  0,  0,  0],       'Color / 0 (no die)';
+    is-deeply ($c1 / $c2).rgba, (11, 6, 4, 4),    'Color / Color';
+    is-deeply ($c1 / 10).rgba,  (11, 12, 13, 14),       'Color / number';
+    is-deeply (200 / $c2).rgba, ( 20,  10,  7,  5), 'number / Color';
+    is-deeply ($c1 / 0).rgba,   ( 0,  0,  0,  0),       'Color / 0 (no die)';
 
-    is-deeply ($c1 * $c3).rgba, [220, 120, 255, 140], 'Color * Color';
-    is-deeply ($c2 * 10).rgba,  [100, 200, 255, 255], 'Color * number';
-    is-deeply (2 * $c2).rgba,   [ 20,  40,  60,  80], 'number * Color';
+    is-deeply ($c1 * $c3).rgba, (220, 120, 255, 140), 'Color * Color';
+    is-deeply ($c2 * 10).rgba,  (100, 200, 255, 255), 'Color * number';
+    is-deeply (2 * $c2).rgba,   ( 20,  40,  60,  80), 'number * Color';
 }, 'operator tests on rgba nums with alpha-math turned on [default]';
 
 diag 'Try again with enabled alpha math';
 subtest {
-    my $c1 = Color.new( rgb => [110, 120, 130], alpha-math => True );
-    my $c2 = Color.new( rgb => [ 10,  20,  30], alpha-math => True );
-    my $c3 = Color.new( rgb => [  2,   1,   2], alpha-math => True );
+    my $c1 = Color.new( rgb => [110, 120, 130] );
+    my $c2 = Color.new( rgb => [ 10,  20,  30] );
+    my $c3 = Color.new( rgb => [  2,   1,   2] );
+    .alpha-math = True for $c1, $c2, $c3;
 
-    is-deeply ($c1 + $c2).rgba, [120, 140, 160, 255], 'Color + Color';
-    is-deeply ($c1 + 10).rgba,  [120, 130, 140, 255], 'Color + number';
-    is-deeply (10 + $c1).rgba,  [120, 130, 140, 255], 'number + Color';
+    is-deeply ($c1 + $c2).rgba, (120, 140, 160, 255), 'Color + Color';
+    is-deeply ($c1 + 10).rgba,  (120, 130, 140, 255), 'Color + number';
+    is-deeply (10 + $c1).rgba,  (120, 130, 140, 255), 'number + Color';
 
-    is-deeply ($c1 - $c2).rgba, [100, 100, 100, 0], 'Color - Color';
-    is-deeply ($c1 - 10).rgba,  [100, 110, 120, 245], 'Color - number';
-    is-deeply (200 - $c1).rgba, [ 90,  80,  70,  0], 'number - Color';
+    is-deeply ($c1 - $c2).rgba, (100, 100, 100, 0), 'Color - Color';
+    is-deeply ($c1 - 10).rgba,  (100, 110, 120, 245), 'Color - number';
+    is-deeply (200 - $c1).rgba, ( 90,  80,  70,  0), 'number - Color';
 
-    is-deeply ($c1 / $c2).rgba, [11, 6, 4.333, 1],    'Color / Color';
-    is-deeply ($c1 / 10).rgba,  [11, 12, 13, 25.5],       'Color / number';
-    is-deeply (200 / $c2).rgba, [ 20,  10,  6.667,  0.784], 'number / Color';
-    is-deeply ($c1 / 0).rgba,   [ 0,  0,  0,  0],       'Color / 0 (no die)';
+    is-deeply ($c1 / $c2).rgba, (11, 6, 4, 1),    'Color / Color';
+    is-deeply ($c1 / 10).rgba,  (11, 12, 13, 26),       'Color / number';
+    is-deeply (200 / $c2).rgba, ( 20,  10,  7,  1), 'number / Color';
+    is-deeply ($c1 / 0).rgba,   ( 0,  0,  0,  0),       'Color / 0 (no die)';
 
-    is-deeply ($c1 * $c3).rgba, [220, 120, 255, 255], 'Color * Color';
-    is-deeply ($c2 * 10).rgba,  [100, 200, 255, 255], 'Color * number';
-    is-deeply (2 * $c2).rgba,   [ 20,  40,  60,  255], 'number * Color';
+    is-deeply ($c1 * $c3).rgba, (220, 120, 255, 255), 'Color * Color';
+    is-deeply ($c2 * 10).rgba,  (100, 200, 255, 255), 'Color * number';
+    is-deeply (2 * $c2).rgba,   ( 20,  40,  60,  255), 'number * Color';
 }, 'operator tests with alpha_math turned on';
 
 diag 'Our fancy-pants unicode ops';
@@ -116,3 +119,5 @@ subtest {
     is-deeply ($c 🞉 20).hsl, $c.saturate(20).hsl,   '🞉 does .saturate';
     is-deeply ($c¡).rgba, $c.invert.rgba,        '¡ does .invert';
 }, 'unicode operators';
+
+done-testing;

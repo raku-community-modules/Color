@@ -6,7 +6,8 @@
     "depends"      : [ ],
     "test-depends" : [ "Test" ],
     "provides"     : {
-        "Color" : "lib/Color.pm6"
+        "Color" : "lib/Color.pm6",
+        "Color::Operators" : "lib/Color/Operators.pm6"
     },
     "author"       : "Zoffix Znet",
     "authority"    : "zoffixznet",

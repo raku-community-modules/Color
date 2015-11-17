@@ -5,12 +5,16 @@ class Color:version<1.001001> {
     has ValidRGB $.g = 0;
     has ValidRGB $.b = 0;
     has ValidRGB $.a = 255;
-    has Bool $.alpha-math = False;
+    has Bool $.alpha-math is rw = False;
 
     ##########################################################################
     # Call forms
     ##########################################################################
     proto method new(|) { * }
+
+    multi method new (Real:D :$r, Real:D :$g, Real:D :$b, Real:D :$a, ) {
+        return self.bless(:$r, :$g, :$b, :$a);
+    }
 
     multi method new (Real:D $c, Real:D $m, Real:D $y, Real:D $k, ) {
         return Color.new( cmyk => [ $c, $m, $y, $k ] );
@@ -242,59 +246,3 @@ sub parse-hex (Str:D $hex is copy) {
 }
 
 sub clip-to ($min, $v is rw, $max) { $v = ($min max $v) min $max }
-
-##############################################################################
-# Custom operators
-##############################################################################
-
-multi infix:<+> (Color $c1, Real  $c2) is export {Color.new( op $c1, $c2, '+' )}
-multi infix:<+> (Real  $c1, Color $c2) is export {Color.new( op $c1, $c2, '+' )}
-multi infix:<+> (Color $c1, Color $c2) is export {
-    say [op $c1, $c2, '+'];
-    Color.new( | op($c1, $c2, '+') );
-}
-multi infix:<-> (Color $c1, Real  $c2) is export {Color.new( op $c1, $c2, '-' )}
-multi infix:<-> (Real  $c1, Color $c2) is export {Color.new( op $c1, $c2, '-' )}
-multi infix:<-> (Color $c1, Color $c2) is export {Color.new( op $c1, $c2, '-' )}
-multi infix:</> (Color $c1, Real  $c2) is export {Color.new( op $c1, $c2, '/' )}
-multi infix:</> (Real  $c1, Color $c2) is export {Color.new( op $c1, $c2, '/' )}
-multi infix:</> (Color $c1, Color $c2) is export {Color.new( op $c1, $c2, '/' )}
-multi infix:<*> (Color $c1, Real  $c2) is export {Color.new( op $c1, $c2, '*' )}
-multi infix:<*> (Real  $c1, Color $c2) is export {Color.new( op $c1, $c2, '*' )}
-multi infix:<*> (Color $c1, Color $c2) is export {Color.new( op $c1, $c2, '*' )}
-multi infix:<◐> (Color $c1, Real:D $Δ) is export { $c1.lighten($Δ) }
-multi infix:<◑> (Color $c1, Real:D $Δ) is export { $c1.darken($Δ) }
-multi infix:<🞅> (Color $c1, Real:D $Δ) is export { $c1.desaturate($Δ) }
-multi infix:<🞉> (Color $c1, Real:D $Δ) is export { $c1.saturate($Δ) }
-multi postfix:<¡> (Color $c1) is export { $c1.invert }
-
-##############################################################################
-# Operator helpers
-##############################################################################
-
-sub op ($obj1, $obj2, Str:D $op) {
-    my %r;
-    for ( <r g b> ) {
-        my $v1 = $obj1 ~~ Color ?? $obj1."$_"() !! $obj1;
-        my $v2 = $obj2 ~~ Color ?? $obj2."$_"() !! $obj2;
-        %r{$_} = EVAL "\$v1 $op \$v2";
-    }
-
-    %r<a> = $obj1 ~~ Color ?? $obj1.a !! $obj2.a;
-    %r<a> = EVAL "\$obj1.a $op \$obj2.a"
-        if $obj1 ~~ Color and $obj2 ~~ Color and $obj1.alpha-math;
-
-    return %r;
-}
-
-# See conversion formulas for CMYK and others here:
-# http://www.rapidtables.com/convert/color/cmyk-to-rgb.htm
-
-# ◐	9680	25D0	 	CIRCLE WITH LEFT HALF BLACK
-# ◑	9681	25D1	 	CIRCLE WITH RIGHT HALF BLACK
-# U+1F789 	🞉  EXTREMELY HEAVY WHITE CIRCLE
-# U+1F785 	🞅 	f0 9f 9e 85 	MEDIUM BOLD WHITE CIRCLE
-# 0xA1 ¡  	INVERTED EXCLAMATION MARK
-# my $lighter = RGB.new('ccc') ◐ 10;
-# my $lighter = RGB.new('ccc') ◑ 10;
-# my $lighter = RGB.new('ccc') + 22.5;
