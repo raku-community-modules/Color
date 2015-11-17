@@ -48,8 +48,8 @@ subtest {
     is $c.to-string('rgbd'),  'rgb(0.039216, 0.737255, 0.870588)',       'rgbd';
     is $c.to-string('rgbad'), 'rgba(0.039216, 0.737255, 0.870588, 1)',  'rgbad';
     is $c.to-string('hex'),   '#0ABCDE',   'hex';
-    # is "$c", $c.to-string('hex'), '#0ABCDE',   'stringification';
-    is $c.gist, $c.to-string('hex'), '#0ABCDE',   '.gist';
+    is "$c", $c.to-string('hex'), 'stringification';
+    is $c.gist, $c.to-string('hex'), '.gist';
     is $c.to-string('hex3'),  '#1CE',      'hex3';
     is $c.to-string('hex8'),  '#0ABCDEFF', 'hex8';
     dies-ok { $c.to-string('foobar') }, 'died on invalid format';
