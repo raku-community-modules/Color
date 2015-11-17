@@ -78,16 +78,52 @@ class Color:version<1.001001> {
     ##########################################################################
     # Methods
     ##########################################################################
-    method cmyk  () { return rgb2cmyk $.r, $.g, $.b;                       }
-    method hsl   () { return rgb2hsl  $.r, $.g, $.b;                       }
-    method hsv   () { return rgb2hsv  $.r, $.g, $.b;                       }
-    method rgb   () { return $.r, $.g, $.b;                                }
-    method rgba  () { return $.r, $.g, $.b, $.a;                           }
-    method rgbd  () { return $.r/255, $.g/255, $.b/255;                    }
-    method rgbad () { return $.r/255, $.g/255, $.b/255, $.a/255;           }
-    method hex   () { return map { .base(16) }, $.r, $.g, $.b;             }
-    method hex3  () { return map { .base(16).substr(0,1) }, $.r, $.g, $.b; }
-    method hex8  () { return map { .base(16) }, $.r, $.g, $.b, $.a;        }
+    method cmyk  () { return rgb2cmyk $.r, $.g, $.b; }
+    method hsl   () { return rgb2hsl  $.r, $.g, $.b; }
+    method hsv   () { return rgb2hsv  $.r, $.g, $.b; }
+    method rgb   () { return map { .round }, $.r, $.g, $.b;      }
+    method rgba  () { return map { .round }, $.r, $.g, $.b, $.a; }
+    method rgbd  () { return $.r/255, $.g/255, $.b/255;                       }
+    method rgbad () { return $.r/255, $.g/255, $.b/255, $.a/255;              }
+    method hex   () { return map { .fmt('%02X') }, $.r, $.g, $.b;             }
+    method hex3  () {
+        # Round the hex; the 247 bit is so we don't get hex 100 for high RGBs
+        return map {
+            my $x = $_;
+            $x= 247 if $_ > 247;
+            $x.round(16).base(16).substr(0,1)
+        }, $.r, $.g, $.b;
+    }
+    method hex8  () { return map { .fmt('%02X') }, $.r, $.g, $.b, $.a;        }
+
+    method darken  ( Real $Δ ) { return self.lighten(-$Δ); }
+    method lighten ( Real $Δ ) {
+        my ( $h, $s, $l ) = self.hsl;
+        $l += $Δ;
+        clip-to 0, $l, 100;
+        return Color.new( hsl => [$h, $s, $l] );
+    }
+    method desaturate ( Real $Δ ) { return self.saturate(-$Δ); }
+    method saturate   ( Real $Δ ) {
+        my ( $h, $s, $l ) = self.hsl;
+        $s += $Δ;
+        clip-to 0, $s, 100;
+        return Color.new( hsl => [$h, $s, $l] );
+    }
+    method invert () {
+        return Color.new( 255-$.r, 255-$.g, 255-$.b );
+    }
+
+    method to-string(Str $type = 'hex') {
+        return do given $type {
+            when m:i/^ hex \d? $/ { '#' ~ self."$type"().join('') }
+            when m:i/^ [ rgba?d? | cmyk | hs<[vl]> ] $/ {
+                ( my $out_type = $type ) ~~ s/d$//;
+                "$out_type\(" ~ self."$type"().join(", ") ~ ")"
+            }
+            when * { fail "Invalid format ($type) to convert to specified"; }
+        }
+    }
 };
 
 ##############################################################################
@@ -96,21 +132,19 @@ class Color:version<1.001001> {
 ##############################################################################
 
 sub rgb2hsv ( $r is copy, $g is copy, $b is copy ) {
-    my ( $h, \Δ, $c_max ) = calc-hue( $r, $g, $b );
+    my ( $h, $Δ, $c_max ) = calc-hue( $r, $g, $b );
 
-    my $s = $c_max == 0 ?? 0 !! Δ / $c_max;
+    my $s = $c_max == 0 ?? 0 !! $Δ / $c_max;
     my $v = $c_max;
 
-    return ($h, $s, $v);
+    return ($h, $s*100, $v*100);
 }
 
-sub rgb2hsl ( $r is copy, $g is copy, $b is copy ) {
-    my ( $h, \Δ ) = calc-hue( $r, $g, $b );
-
-    my $l = Δ / 2;
-    my $s = Δ / (1 - abs(2*$l - 1));
-
-    return ($h, $s, $l);
+sub rgb2hsl ( $r is copy, $g is copy, $b is copy ) is export {
+    my ( $h, $Δ, $c_max, $c_min ) = calc-hue( $r, $g, $b );
+    my $l = ($c_max + $c_min) / 2;
+    my $s = $Δ / (1 - abs(2*$l - 1));
+    return ($h, $s*100, $l*100);
 }
 
 sub rgb2cmyk ( $r is copy, $g is copy, $b is copy ) {
@@ -132,10 +166,11 @@ sub cmyk2rgb ( @ ($c is copy, $m is copy, $y is copy, $k is copy) ) {
     return %(:$r, :$g, :$b);
 }
 
-sub hsl2rgb ( @ ($h is copy, $s is copy, $l is copy) ){
+sub hsl2rgb ( @ ($h is copy, $s is copy, $l is copy) ) is export {
     $s /= 100;
     $l /= 100;
-    clip-to 0, $h, 359.999999;
+    $h -= 360 while $h >= 360;
+    $h += 360 while $h < 0;
     clip-to 0, $s, 1;
     clip-to 0, $l, 1;
 
@@ -151,7 +186,8 @@ sub hsl2rgb ( @ ($h is copy, $s is copy, $l is copy) ){
 sub hsv2rgb ( @ ($h is copy, $s is copy, $v is copy) ){
     $s /= 100;
     $v /= 100;
-    clip-to 0, $h, 359.999999;
+    $h -= 360 while $h >= 360;
+    $h += 360 while $h < 0;
     clip-to 0, $s, 1;
     clip-to 0, $v, 1;
 
@@ -194,7 +230,7 @@ sub calc-hue ($r is copy, $g is copy, $b is copy ) {
         when $b     { 60 * ( ($r - $g)/Δ + 4 ) }
     };
 
-    return ($h, Δ, $c_max);
+    return ($h, Δ, $c_max, $c_min);
 }
 
 sub parse-hex (Str:D $hex is copy) {

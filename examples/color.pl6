@@ -1,9 +1,12 @@
 use v6;
 use Color;
 
-my $c = Color.new(rgb => [22, 42, 55]); #[0].^signature.perl.say;
-say [204, 60.0, 21.6];
-say Color.hsv;
+say hsl2rgb( [25, 50, 50] );
+say rgb2hsl( 191, 117, 64 );
+
+# my $c = Color.new(rgb => [22, 42, 55]); #[0].^signature.perl.say;
+# say [204, 60.0, 21.6];
+# say $c.hsv;
 
 # say $c.cmyk;
 
