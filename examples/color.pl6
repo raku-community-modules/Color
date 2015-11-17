@@ -1,10 +1,11 @@
 use v6;
 use Color;
 
-my $c = Color.new('333');
-my $c2 = Color.new('555');
-my $c3 = $c + $c2;
-say $c3.to-string('hex');
+say Color.new('333').cmyk.WHAT;
+# my $c = Color.new('333');
+# my $c2 = Color.new('555');
+# my $c3 = $c + $c2;
+# say $c3.to-string('hex');
 
 # my $c = Color.new(rgb => [22, 42, 55]); #[0].^signature.perl.say;
 # say [204, 60.0, 21.6];
