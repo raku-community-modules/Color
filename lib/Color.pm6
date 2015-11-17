@@ -247,28 +247,44 @@ sub clip-to ($min, $v is rw, $max) { $v = ($min max $v) min $max }
 # Custom operators
 ##############################################################################
 
-multi infix:<+> (Color $obj, Int $n) is export {
-    Color.new(
-        r => $obj.r + $n,
-        g => $obj.g + $n,
-        b => $obj.b + $n,
-    );
+multi infix:<+> (Color $c1, Real  $c2) is export {Color.new( op $c1, $c2, '+' )}
+multi infix:<+> (Real  $c1, Color $c2) is export {Color.new( op $c1, $c2, '+' )}
+multi infix:<+> (Color $c1, Color $c2) is export {
+    say [op $c1, $c2, '+'];
+    Color.new( | op($c1, $c2, '+') );
 }
+multi infix:<-> (Color $c1, Real  $c2) is export {Color.new( op $c1, $c2, '-' )}
+multi infix:<-> (Real  $c1, Color $c2) is export {Color.new( op $c1, $c2, '-' )}
+multi infix:<-> (Color $c1, Color $c2) is export {Color.new( op $c1, $c2, '-' )}
+multi infix:</> (Color $c1, Real  $c2) is export {Color.new( op $c1, $c2, '/' )}
+multi infix:</> (Real  $c1, Color $c2) is export {Color.new( op $c1, $c2, '/' )}
+multi infix:</> (Color $c1, Color $c2) is export {Color.new( op $c1, $c2, '/' )}
+multi infix:<*> (Color $c1, Real  $c2) is export {Color.new( op $c1, $c2, '*' )}
+multi infix:<*> (Real  $c1, Color $c2) is export {Color.new( op $c1, $c2, '*' )}
+multi infix:<*> (Color $c1, Color $c2) is export {Color.new( op $c1, $c2, '*' )}
+multi infix:<◐> (Color $c1, Real:D $Δ) is export { $c1.lighten($Δ) }
+multi infix:<◑> (Color $c1, Real:D $Δ) is export { $c1.darken($Δ) }
+multi infix:<🞅> (Color $c1, Real:D $Δ) is export { $c1.desaturate($Δ) }
+multi infix:<🞉> (Color $c1, Real:D $Δ) is export { $c1.saturate($Δ) }
+multi postfix:<¡> (Color $c1) is export { $c1.invert }
 
-multi infix:<+> (Int $n, Color $obj) is export {
-    Color.new(
-        r => $obj.r + $n,
-        g => $obj.g + $n,
-        b => $obj.b + $n,
-    );
-}
+##############################################################################
+# Operator helpers
+##############################################################################
 
-multi infix:<+> (Color $obj1, Color $obj2) is export {
-    Color.new(
-        r => $obj1.r + $obj2.r,
-        g => $obj1.g + $obj2.g,
-        b => $obj1.b + $obj2.b,
-    );
+sub op ($obj1, $obj2, Str:D $op) {
+    my %r;
+    for ( <r g b> ) {
+        my $v1 = $obj1 ~~ Color ?? $obj1."$_"() !! $obj1;
+        my $v2 = $obj2 ~~ Color ?? $obj2."$_"() !! $obj2;
+        %r{$_} = EVAL "\$v1 $op \$v2";
+    }
+
+    %r<a> = $obj1 ~~ Color ?? $obj1.a !! $obj2.a;
+    %r<a> = EVAL "\$obj1.a $op \$obj2.a"
+        if $obj1 ~~ Color and $obj2 ~~ Color and $obj1.alpha-math;
+
+    return %r;
 }
 
 # See conversion formulas for CMYK and others here:

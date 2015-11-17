@@ -108,11 +108,11 @@ subtest {
     isa-ok $c ◑ 20, 'Color';
     isa-ok $c 🞅 20, 'Color';
     isa-ok $c 🞉 20, 'Color';
-    isa-ok $c ¡ 20, 'Color';
+    isa-ok $c¡, 'Color';
 
     is-deeply ($c ◐ 20).hsl, $c.lighten(20).hsl,     '◐ does .lighten';
     is-deeply ($c ◑ 20).hsl, $c.darken(20).hsl,      '◑ does .darken';
     is-deeply ($c 🞅 20).hsl, $c.desaturate(20).hsl, '🞅 does .desaturate';
     is-deeply ($c 🞉 20).hsl, $c.saturate(20).hsl,   '🞉 does .saturate';
-    is-deeply ($c ¡ 20).rgba, $c.invert.rgba,        '¡ does .invert';
+    is-deeply ($c¡).rgba, $c.invert.rgba,        '¡ does .invert';
 }, 'unicode operators';

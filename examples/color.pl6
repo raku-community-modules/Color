@@ -1,8 +1,10 @@
 use v6;
 use Color;
 
-say hsl2rgb( [25, 50, 50] );
-say rgb2hsl( 191, 117, 64 );
+my $c = Color.new('333');
+my $c2 = Color.new('555');
+my $c3 = $c + $c2;
+say $c3.to-string('hex');
 
 # my $c = Color.new(rgb => [22, 42, 55]); #[0].^signature.perl.say;
 # say [204, 60.0, 21.6];
