@@ -150,7 +150,7 @@ sub rgb2hsv ( $r is copy, $g is copy, $b is copy ) {
 sub rgb2hsl ( $r is copy, $g is copy, $b is copy ) is export {
     my ( $h, $Δ, $c_max, $c_min ) = calc-hue( $r, $g, $b );
     my $l = ($c_max + $c_min) / 2;
-    my $s = $Δ / (1 - abs(2*$l - 1));
+    my $s = $Δ == 0 ?? 0 !! $Δ / (1 - abs(2*$l - 1));
     return ($h, $s*100, $l*100);
 }
 
