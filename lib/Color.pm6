@@ -1,5 +1,5 @@
 use v6;
-class Color:version<1.001001> {
+class Color:ver<1.001001> {
     subset ValidRGB of Real where 0 <= $_ <= 255;
     has ValidRGB $.r = 0;
     has ValidRGB $.g = 0;

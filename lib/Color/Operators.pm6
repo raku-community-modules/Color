@@ -1,6 +1,6 @@
 use v6;
 use Color;
-unit package Color::Operators:version<1.001001>;
+unit package Color::Operators:ver<1.001001>;
 
 multi infix:<+> (Color $c1, Real  $c2) is export {Color.new(|op $c1, $c2, '+')}
 multi infix:<+> (Real  $c1, Color $c2) is export {Color.new(|op $c1, $c2, '+')}
