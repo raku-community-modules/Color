@@ -10,7 +10,7 @@ subtest {
     isa-ok $c, 'Color';
     can-ok $c, $_, "can do $_" for qw/
         r  g  b  a  cmyk  hsl  hsv  rgb  rgba  rgbd  rgbad
-        hex  hex3  hex8  darken  lighten
+        hex  hex3  hex4  hex8  darken  lighten
     /;
 }, 'method/ISA check';
 
@@ -33,6 +33,7 @@ subtest {
     is-deeply $c.rgbad, (<2/51>, <188/255>, <74/85>, 1.0),    'rgbad';
     is $c.hex,  <0A BC DE>,    'hex';
     is $c.hex3, <1 C E>,       'hex3';
+    is $c.hex4, <1 C E F>,     'hex4';
     is Color.new(255, 240, 218).hex3, <F F E>,       'hex3 (rounding)';
     is Color.new(  0, 218, 214).hex3, <0 E D>,       'hex3 (rounding, more)';
     is $c.hex8, <0A BC DE FF>, 'hex8';

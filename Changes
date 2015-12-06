@@ -1,4 +1,7 @@
 Revision History for 'Color' Perl 6 Distribution
 
+1.002001  2015-12-06
+  - Added .hex4 method (#1)
+
 1.001001  2015-11-16
   - First version released on an unsuspecting world

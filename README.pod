@@ -158,13 +158,21 @@ Returns a list of 3 2-digit hex numbers representing the color.
 
 =head2 C<hex3>
 
-    say $c.hex; #  (1 C E);
+    say $c.hex3; #  (1 C E);
 
 Returns a list of 3 1-digit hex numbers representing the color. They will
 be rounded and they need to be doubled (i.e. the above would be C<11CCEE>)
 to get the actual value.
 
-=head2 C<hex>
+=head2 C<hex4>
+
+    say $c.hex4; #  (1 C E F);
+
+Returns a list of 4 1-digit hex numbers representing the color. They will
+be rounded and they need to be doubled (i.e. the above would be C<11CCEEFF>)
+to get the actual value.
+
+=head2 C<hex8>
 
     say $c.hex8; #  (0A BC DE FF);
 
@@ -179,7 +187,7 @@ Converts the colour to HSL format and returns the three values
 (hue, saturation, lightness). The S/L are returned as percentages, not decimals,
 so 50% saturation is returned as C<50>, not C<.5>.
 
-=head2 C<hsl>
+=head2 C<hsv>
 
     say $c.hsv; # (<10050/53>, <10600/111>, <1480/17>),
 

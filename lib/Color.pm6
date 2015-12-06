@@ -1,5 +1,5 @@
 use v6;
-class Color:ver<1.001001> {
+class Color:ver<1.002001> {
     subset ValidRGB of Real where 0 <= $_ <= 255;
     has ValidRGB $.r = 0;
     has ValidRGB $.g = 0;
@@ -97,6 +97,14 @@ class Color:ver<1.001001> {
             $x= 247 if $_ > 247;
             $x.round(16).base(16).substr(0,1)
         }, $.r, $.g, $.b;
+    }
+    method hex4  () {
+        # Round the hex; the 247 bit is so we don't get hex 100 for high RGBs
+        return map {
+            my $x = $_;
+            $x= 247 if $_ > 247;
+            $x.round(16).base(16).substr(0,1)
+        }, $.r, $.g, $.b, $.a;
     }
     method hex8  () { return map { .fmt('%02X') }, $.r, $.g, $.b, $.a;        }
 
