@@ -1,4 +1,5 @@
 {
+    "perl"         : "6.c",
     "name"         : "Color",
     "version"      : "1.001001",
     "description"
@@ -9,7 +10,6 @@
         "Color" : "lib/Color.pm6",
         "Color::Operators" : "lib/Color/Operators.pm6"
     },
-    "author"       : "Zoffix Znet",
-    "authority"    : "zoffixznet",
-    "source-url"   : "git://github.com/zoffixznet/perl6-Color.git"
+    "authors"      : ["Zoffix Znet"],
+    "support"      : { "source-url" : "git://github.com/zoffixznet/perl6-Color.git" }
 }
