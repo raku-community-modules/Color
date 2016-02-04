@@ -11,5 +11,5 @@
         "Color::Operators" : "lib/Color/Operators.pm6"
     },
     "authors"      : ["Zoffix Znet"],
-    "support"      : { "source-url" : "git://github.com/zoffixznet/perl6-Color.git" }
+    "support"      : { "source" : "git://github.com/zoffixznet/perl6-Color.git" }
 }
