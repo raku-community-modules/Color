@@ -1,6 +1,7 @@
 {
     "perl"         : "6.c",
     "name"         : "Color",
+    "license"      : "Artistic-2.0",
     "version"      : "1.001001",
     "description"
         : "Format conversion, manipulation, and math operations on colours",
