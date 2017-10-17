@@ -71,4 +71,10 @@ subtest {
     is-deeply $c.invert.rgba,        (64, 138, 191, 255), 'invert colour'    ;
 }, 'color manipulation';
 
+subtest {
+    my $c = Color.new( 255.0, 0.0, 0.0 );
+    is-deeply $c, $c.rotate( 360 ), 'turning color wheel way around';
+    is-deeply $c.invert, $c.rotate( 180 ), 'turning color wheel halfway around';
+}
+
 done-testing;
