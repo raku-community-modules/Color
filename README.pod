@@ -332,6 +332,7 @@ Zoffix Znet L<http://zoffix.com/>
 =head1 CONTRIBUTORS
 
 Thanks to timotimo++, jnthn++, psch++, RabidGravy++, ab5tract++, moritz++,
+HoboWithAShotgun++,
 and anyone else who I forgot who helped me with questions on IRC.
 
 =head1 LICENSE
