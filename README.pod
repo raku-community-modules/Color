@@ -109,7 +109,7 @@ Creates a new C<Color> object that is inverted (black becomes white, etc).
 
 =head2 C<lighten>
 
-say $c.lighten(10).cmyk; # lighten by 10%
+    say $c.lighten(10).cmyk; # lighten by 10%
 
 Creates a new C<Color> object that is lightened by the percetange given as the
 argument.
@@ -120,6 +120,14 @@ argument.
 
 Creates a new C<Color> object that is saturated by the percetange given as
 the argument.
+
+
+=head2 C<rotate>
+
+    $inverse = $c.rotate( 180 );
+
+Creates a new C<Color> object, rotated around the HSL color wheel
+by the angle $α (in degrees).
 
 =head1 CONVERSION METHODS
 
@@ -300,6 +308,12 @@ C<U+00A1 (c2 a1): INVERTED EXCLAMATION MARK [¡]>. Same as C</invert>
 
 The C<Color> object overrides C<.Str> and C<.gist> methods to be
 equivalent to C<.to-string('hex')>.
+
+=head1 Functional interface
+
+The color conversion, manipulation und utility functions are defined within
+the modules C<Color::Conversion>, C<Color::Manipulation> and C<Color::Utilitie> and can
+be used without the OO interface.
 
 =head1 REPOSITORY
 
