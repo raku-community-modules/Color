@@ -312,8 +312,8 @@ equivalent to C<.to-string('hex')>.
 =head1 Functional interface
 
 The color conversion, manipulation und utility functions are defined within
-the modules C<Color::Conversion>, C<Color::Manipulation> and C<Color::Utilitie> and can
-be used without the OO interface.
+the modules C<Color::Conversion>, C<Color::Manipulation> and C<Color::Utilities> and can
+be used without the OO interface. The names of functions are the same as those of methods.
 
 =head1 REPOSITORY
 
