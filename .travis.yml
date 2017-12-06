@@ -1,7 +1,7 @@
 branches:
   only:
     - master
-    - martimm-20171205
+#    - martimm-20171205
 
 language: perl6
 perl6:
