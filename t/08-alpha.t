@@ -4,7 +4,6 @@ use v6;
 use Test;
 use lib 'lib';
 use Color;
-use Color::Operators;
 
 diag 'Tests on alpha channel behavior';
 
