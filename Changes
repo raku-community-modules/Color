@@ -1,7 +1,10 @@
 Revision History for 'Color' Perl 6 Distribution
 
-1.002005  2017-12-06
+1.002005  2017-12-06 (by Marcel Timmerman - MARTIMM on github)
   - Added .alpha method to get and set alpha channel
+  - Modified lighten, darken, (de)saturate, invert and rotate to return the
+    color with the transparency level of the input color. The attribute alpha-math
+    is copied as well.
 
 1.002001  2015-12-06
   - Added .hex4 method (#1)
