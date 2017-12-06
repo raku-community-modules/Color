@@ -4,7 +4,7 @@
 
 =head1 NAME
 
-Color - Format conversion, manipulation, and math operations on colours
+Color - Format conversion, manipulation, and math operations on colors
 
 =head1 SYNOPSIS
 
@@ -30,8 +30,8 @@ Color - Format conversion, manipulation, and math operations on colours
 
 =head1 DESCRIPTION
 
-This module allows you to perform mathematical operations on RGB colour tuples,
-as well as convert them into other colour formats, like hex, and manipulate
+This module allows you to perform mathematical operations on RGB color tuples,
+as well as convert them into other color formats, like hex, and manipulate
 them by, for example, making them lighter, darker, or more or less saturated.
 
 =head1 OPERATORS
@@ -82,23 +82,32 @@ incurr slight precision loss when converting from other formats.
     $c.alpha-math = False;
 
 Boolean. Specifies whether operator math from C<Color::Operators> should affect
-the alpha channel. Colours contructed from RGBA automatically get this
+the alpha channel. Colors constructed from RGBA automatically get this
 attribute set to C<True>, rest of formats have it set as C<False>.
 
 =head1 MANIPULATION METHODS
+
+=head1 C<alpha>
+
+    my Color $c .= new('#ff0088');
+    say $c.alpha;                   # OUTPUT: 255
+    $c.alpha(128);
+    say $c.alpha-math;              # OUTPUT: True
+
+Get or set the alpha channel value.
 
 =head2 C<darken>
 
     say $c.darken(10).cmyk; # darken by 10%
 
-Creates a new C<Color> object that is darkened by the percetange given as the
+Creates a new C<Color> object that is darkened by the percentage given as the
 argument.
 
 =head2 C<desaturate>
 
     say $c.desaturate(20).cmyk;
 
-Creates a new C<Color> object that is desaturated by the percetange given as
+Creates a new C<Color> object that is desaturated by the percentage given as
 the argument.
 
 =head2 C<invert>
@@ -111,14 +120,14 @@ Creates a new C<Color> object that is inverted (black becomes white, etc).
 
     say $c.lighten(10).cmyk; # lighten by 10%
 
-Creates a new C<Color> object that is lightened by the percetange given as the
+Creates a new C<Color> object that is lightened by the percentage given as the
 argument.
 
 =head2 C<saturate>
 
     say $c.saturate(20).cmyk;
 
-Creates a new C<Color> object that is saturated by the percetange given as
+Creates a new C<Color> object that is saturated by the percentage given as
 the argument.
 
 
@@ -128,6 +137,10 @@ the argument.
 
 Creates a new C<Color> object, rotated around the HSL color wheel
 by the angle $α (in degrees).
+
+For all methods C<darken>, C<desaturate>, C<invert>, C<lighten>, C<saturate>
+and C<rotate> the colors will have their alpha channel copied from the
+input color. The attribute alpha-math is copied as well.
 
 =head1 CONVERSION METHODS
 
@@ -207,13 +220,13 @@ so 50% saturation is returned as C<50>, not C<.5>.
 
     say $c.rgb; # (10, 188, 222)
 
-Converts the color to RGB format and returns a list of the three colours.
+Converts the color to RGB format and returns a list of the three colors.
 
 =head2 C<rgba>
 
     say $c.rgba; # (10, 188, 222, 255);
 
-Converts the color to RGBA format and returns a list of the three colours,
+Converts the color to RGBA format and returns a list of the three colors,
 and alpha channel.
 
 =head2 C<rgbd>
