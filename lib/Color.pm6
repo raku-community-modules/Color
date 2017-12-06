@@ -150,6 +150,10 @@ class Color:ver<1.002001>
         }
     }
 
+    # MARTIMM: better methods to get and set alpha channel
+    multi method alpha ( ValidRGB $alpha ) { $!a = $alpha; $!alpha-math = True; }
+    multi method alpha ( ) { $!a }
+
     method gist { return self.to-string('hex') };
     method Str  { return self.to-string('hex') };
 };

@@ -1,5 +1,8 @@
 Revision History for 'Color' Perl 6 Distribution
 
+1.002005  2017-12-06
+  - Added .alpha method to get and set alpha channel
+
 1.002001  2015-12-06
   - Added .hex4 method (#1)
 
