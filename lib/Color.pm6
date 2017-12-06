@@ -121,22 +121,30 @@ class Color:ver<1.002001>
 
     method darken  ( Real $Δ ) { return self.lighten(-$Δ); }
     method lighten ( Real $Δ ) {
-        return Color.new( hsl => [
-          lighten( |self.hsl, $Δ )
-        ]);
+        my Color $c .= new( hsl => [lighten( |self.hsl, $Δ )]);
+        $c.alpha($!a) unless $!a == 255;
+        $c.alpha-math = $!alpha-math;
+        $c
     }
     method desaturate ( Real $Δ ) { return self.saturate(-$Δ); }
     method saturate   ( Real $Δ ) {
-        return Color.new( hsl => [
-          saturate( |self.hsl, $Δ )
-        ]);
+        my Color $c .= new( hsl => [saturate( |self.hsl, $Δ )]);
+        $c.alpha($!a) unless $!a == 255;
+        $c.alpha-math = $!alpha-math;
+        $c
     }
     method invert () {
-        return Color.new( 255-$.r, 255-$.g, 255-$.b );
+        my Color $c .= new( 255-$.r, 255-$.g, 255-$.b );
+        $c.alpha($!a) unless $!a == 255;
+        $c.alpha-math = $!alpha-math;
+        $c
     }
     method rotate( Real $α )
     {
-      return Color.new( |rotate( $.r, $.g, $.b, $α ) );
+        my Color $c .= new( |rotate( $.r, $.g, $.b, $α ) );
+        $c.alpha($!a) unless $!a == 255;
+        $c.alpha-math = $!alpha-math;
+        $c
     }
 
     method to-string(Str $type = 'hex') {
