@@ -42,7 +42,13 @@ subtest {
 subtest {
     my $c = Color.new( hex => '#0abcde');
     is $c.to-string('cmyk'),  'cmyk(0.954955, 0.153153, 0, 0.129412)',   'cmyk';
-    is $c.to-string('hsl'),   'hsl(189.622642, 91.379310, 45.490196)',   'hsl';
+    
+    { # allow for trailing zero to be missing
+        ok so($c.to-string('hsl') eq 'hsl(189.622642, 91.379310, 45.490196)'
+                                   | 'hsl(189.622642, 91.37931, 45.490196)'
+        ),   'hsl';
+    }
+    
     is $c.to-string('hsv'),   'hsv(189.622642, 95.495495, 87.058824)',   'hsv';
     is $c.to-string('rgb'),   'rgb(10, 188, 222)',                       'rgb';
     is $c.to-string('rgba'),  'rgba(10, 188, 222, 255)',                 'rgba';
