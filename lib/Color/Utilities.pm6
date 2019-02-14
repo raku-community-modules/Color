@@ -25,7 +25,7 @@ sub parse-hex (Str:D $hex is copy) is export
 {
     $hex ~~ s/^ '#'//;
     3 <= $hex.chars <= 4 and $hex ~~ s:g/(.)/$0$0/;
-    my ( $r, $g, $b, $a ) = map { :16($_) }, $hex.comb(/../);
+    my ( $r, $g, $b, $a ) = map { :16($_).Int }, $hex.comb(/../);
     $a //= 255;
     return %( :$r, :$g, :$b, :$a );
 }
