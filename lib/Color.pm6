@@ -1,7 +1,7 @@
 use v6;
 
 
-class Color:ver<1.002005>
+class Color:ver<1.002007>
 {
     use Color::Conversion;
     use Color::Utilities;
@@ -87,15 +87,23 @@ class Color:ver<1.002005>
     multi method new ( Array() :$hsl where $_ ~~ [Real, Real, Real] )
     { return self.bless( |hsl2rgb $hsl ) }
 
+    multi method new ( Array() :$hsla where $_ ~~ [Real, Real, Real, Real] )
+    { return self.bless( |hsla2rgba $hsla ) }
+
     multi method new ( Array() :$hsv where $_ ~~ [Real, Real, Real] )
     { return self.bless( |hsv2rgb $hsv ) }
+
+    multi method new ( Array() :$hsva where $_ ~~ [Real, Real, Real, Real] )
+    { return self.bless( |hsva2rgba $hsva ) }
 
     ##########################################################################
     # Methods
     ##########################################################################
-    method cmyk  () { return rgb2cmyk $.r, $.g, $.b; }
-    method hsl   () { return rgb2hsl  $.r, $.g, $.b; }
-    method hsv   () { return rgb2hsv  $.r, $.g, $.b; }
+    method cmyk  () { return rgb2cmyk  $.r, $.g, $.b; }
+    method hsl   () { return rgb2hsl   $.r, $.g, $.b; }
+    method hsla  () { return rgba2hsla $.r, $.g, $.b, $.a; }
+    method hsv   () { return rgb2hsv   $.r, $.g, $.b; }
+    method hsva  () { return rgba2hsva $.r, $.g, $.b, $.a; }
     method rgb   () { return map { .round }, $.r, $.g, $.b;      }
     method rgba  () { return map { .round }, $.r, $.g, $.b, $.a; }
     method rgbd  () { return $.r/255, $.g/255, $.b/255;                       }
@@ -150,7 +158,7 @@ class Color:ver<1.002005>
     method to-string(Str $type = 'hex') {
         return do given $type {
             when m:i/^ hex \d? $/ { '#' ~ self."$type"().join('') }
-            when m:i/^ [ rgba?d? | cmyk | hs<[vl]> ] $/ {
+            when m:i/^ [ rgba?d? | cmyk | hs<[vl]>a? ] $/ {
                 ( my $out_type = $type ) ~~ s/d$//;
                 "$out_type\(" ~ self."$type"().join(", ") ~ ")"
             }

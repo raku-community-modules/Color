@@ -222,6 +222,16 @@ subtest {
     is $c.a, 255, 'alpha is correct';
 }, ".new( hsl => [ 72, 78, 65] )";
 
+diag 'HSLA tuple';
+subtest {
+    my $c = Color.new( hsla => [ 72, 78, 65, 123] );
+    isa-ok $c, 'Color';
+    is $c.r, 207.519, 'red is correct';
+    is $c.g, 235.365, 'green is correct';
+    is $c.b, 96.135, 'blue is correct';
+    is $c.a, 123, 'alpha is correct';
+}, ".new( hsla => [ 72, 78, 65, 123] )";
+
 subtest {
     my $c = Color.new( :hsl< 72 78 65> );
     isa-ok $c, 'Color';
@@ -240,6 +250,16 @@ subtest {
     is $c.b, 71.4, 'blue is correct';
     is $c.a, 255, 'alpha is correct';
 }, ".new( hsv => [ 90, 60, 70] )";
+
+diag 'HSVA tuple';
+subtest {
+    my $c = Color.new( hsva => [ 90, 60, 70, 123] );
+    isa-ok $c, 'Color';
+    is $c.r, 124.95, 'red is correct';
+    is $c.g, 178.5, 'green is correct';
+    is $c.b, 71.4, 'blue is correct';
+    is $c.a, 123, 'alpha is correct';
+}, ".new( hsva => [ 90, 60, 70, 123] )";
 
 subtest {
     my $c = Color.new( :hsv<90 60 70> );

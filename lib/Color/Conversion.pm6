@@ -17,11 +17,21 @@ sub rgb2hsv ( $r is copy, $g is copy, $b is copy ) is export {
     return ($h, $s*100, $v*100);
 }
 
+sub rgba2hsva ( $r, $g, $b, $a ) is export {
+    my ( $h, $s, $v ) = rgb2hsv( $r, $g, $b);
+    return ($h, $s, $v, $a);
+}
+
 sub rgb2hsl ( $r is copy, $g is copy, $b is copy ) is export {
     my ( $h, $Δ, $c_max, $c_min ) = calc-hue( $r, $g, $b );
     my $l = ($c_max + $c_min) / 2;
     my $s = $Δ == 0 ?? 0 !! $Δ / (1 - abs(2*$l - 1));
     return ($h, $s*100, $l*100);
+}
+
+sub rgba2hsla ( $r, $g, $b, $a ) is export {
+    my ( $h, $s, $l ) = rgb2hsl( $r, $g, $b);
+    return ($h, $s, $l, $a);
 }
 
 sub rgb2cmyk ( $r is copy, $g is copy, $b is copy ) is export  {
@@ -60,6 +70,10 @@ sub hsl2rgb ( @ ($h is copy, $s is copy, $l is copy) ) is export {
     return rgb-from-c-x-m( $h, $c, $x, $m );
 }
 
+sub hsla2rgba ( @ ($h, $s, $l, $a) ) is export {
+    %( hsl2rgb(($h, $s, $l)), :$a );
+}
+
 sub hsv2rgb ( @ ($h is copy, $s is copy, $v is copy) )  is export {
     $s /= 100;
     $v /= 100;
@@ -73,6 +87,10 @@ sub hsv2rgb ( @ ($h is copy, $s is copy, $v is copy) )  is export {
     my $x = $c * (1 - abs( (($h/60) % 2) - 1 ) );
     my $m = $v - $c;
     return rgb-from-c-x-m( $h, $c, $x, $m );
+}
+
+sub hsva2rgba ( @ ($h, $s, $v, $a) ) is export {
+    %( hsv2rgb(($h, $s, $v)), :$a );
 }
 
 sub rgb-from-c-x-m ($h, $c, $x, $m) is export {

@@ -148,7 +148,9 @@ input color. The attribute alpha-math is copied as well.
 
     $c.to-string('cmyk'); #   cmyk(0.954955, 0.153153, 0, 0.129412)
     $c.to-string('hsl');  #   hsl(189.622642, 91.379310, 45.490196)
+    $c.to-string('hsla'); #   hsl(189.622642, 91.379310, 45.490196, 255)
     $c.to-string('hsv');  #   hsv(189.622642, 95.495495, 87.058824)
+    $c.to-string('hsva'); #   hsva(189.622642, 95.495495, 87.058824, 255)
     $c.to-string('rgb');  #   rgb(10, 188, 222)
     $c.to-string('rgba'); #   rgba(10, 188, 222, 255)
     $c.to-string('rgbd'); #   rgb(0.039216, 0.737255, 0.870588)
@@ -208,6 +210,13 @@ Converts the colour to HSL format and returns the three values
 (hue, saturation, lightness). The S/L are returned as percentages, not decimals,
 so 50% saturation is returned as C<50>, not C<.5>.
 
+=head2 C<hsla>
+
+    say $c.hsla; # (<10050/53>, <10600/111>, <1480/17>, 255),
+
+Converts the color to HSL format and returns the three values,
+and alpha channel.
+
 =head2 C<hsv>
 
     say $c.hsv; # (<10050/53>, <10600/111>, <1480/17>),
@@ -215,6 +224,13 @@ so 50% saturation is returned as C<50>, not C<.5>.
 Converts the colour to HSV format and returns the three values
 (hue, saturation, value). The S/V are returned as percentages, not decimals,
 so 50% saturation is returned as C<50>, not C<.5>.
+
+=head2 C<hsva>
+
+    say $c.hsva; # (<10050/53>, <10600/111>, <1480/17>, 255),
+
+Converts the color to HSV format and returns the three values,
+and alpha channel.
 
 =head2 C<rgb>
 

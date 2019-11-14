@@ -9,7 +9,7 @@ subtest {
     my $c = Color.new( hex => '#0abcde');
     isa-ok $c, 'Color';
     can-ok $c, $_, "can do $_" for qw/
-        r  g  b  a  cmyk  hsl  hsv  rgb  rgba  rgbd  rgbad
+        r  g  b  a  cmyk  hsl  hsla hsv  hsva rgb  rgba  rgbd  rgbad
         hex  hex3  hex4  hex8  darken  lighten
     /;
 }, 'method/ISA check';
@@ -26,7 +26,9 @@ subtest {
     my $c = Color.new( hex => '#0abcde');
     is-deeply $c.cmyk,  (<106/111>, <17/111>, 0.0, <11/85>),  'cmyk';
     is-deeply $c.hsl,   (<10050/53>, <2650/29>, <2320/51>),   'hsl';
+    is-deeply $c.hsla,  (<10050/53>, <2650/29>, <2320/51>, 255), 'hsla';
     is-deeply $c.hsv,   (<10050/53>, <10600/111>, <1480/17>), 'hsv';
+    is-deeply $c.hsva,  (<10050/53>, <10600/111>, <1480/17>, 255), 'hsva';
     is-deeply $c.rgb,   (10, 188, 222),                       'rgb';
     is-deeply $c.rgba,  (10, 188, 222, 255),                  'rgba';
     is-deeply $c.rgbd,  (<2/51>, <188/255>, <74/85>),         'rgbd';
@@ -47,9 +49,14 @@ subtest {
         ok so($c.to-string('hsl') eq 'hsl(189.622642, 91.379310, 45.490196)'
                                    | 'hsl(189.622642, 91.37931, 45.490196)'
         ),   'hsl';
+
+        ok so($c.to-string('hsla') eq 'hsla(189.622642, 91.379310, 45.490196, 255)'
+                                   | 'hsla(189.622642, 91.37931, 45.490196, 255)'
+        ),   'hsla';
     }
     
     is $c.to-string('hsv'),   'hsv(189.622642, 95.495495, 87.058824)',   'hsv';
+    is $c.to-string('hsva'),   'hsva(189.622642, 95.495495, 87.058824, 255)',   'hsva';
     is $c.to-string('rgb'),   'rgb(10, 188, 222)',                       'rgb';
     is $c.to-string('rgba'),  'rgba(10, 188, 222, 255)',                 'rgba';
     is $c.to-string('rgbd'),  'rgb(0.039216, 0.737255, 0.870588)',       'rgbd';

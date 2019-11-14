@@ -1,5 +1,9 @@
 Revision History for 'Color' Perl 6 Distribution
 
+1.002007  2019-11-15 (David Warring - dwarring)
+  - Added hsla and hsva conversion formats. Both fairly trivial; they
+    just carry an alpha channel.
+
 1.002005  2017-12-06 (by Marcel Timmerman - MARTIMM on github)
   - Added .alpha method to get and set alpha channel
   - Modified lighten, darken, (de)saturate, invert and rotate to return the
