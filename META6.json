@@ -2,7 +2,7 @@
     "perl"         : "6.c",
     "name"         : "Color",
     "license"      : "Artistic-2.0",
-    "version"      : "1.002006",
+    "version"      : "1.002007",
     "description"
         : "Format conversion, manipulation, and math operations on colours",
     "depends"      : [ ],
