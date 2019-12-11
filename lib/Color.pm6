@@ -19,47 +19,48 @@ class Color:ver<1.002007>
     ##########################################################################
     proto method new(|) { * }
 
-    multi method new (Real:D :$r, Real:D :$g, Real:D :$b, Real:D :$a, ) {
-        return self.bless(:$r, :$g, :$b, :$a);
+    multi method new (Real:D :$r, Real:D :$g, Real:D :$b, Real:D :$a, *%c) {
+        return self.bless(:$r, :$g, :$b, :$a, |%c);
     }
 
-    multi method new (Real:D $c, Real:D $m, Real:D $y, Real:D $k, ) {
-        return Color.new( cmyk => [ $c, $m, $y, $k ] );
+    multi method new (Real:D $c, Real:D $m, Real:D $y, Real:D $k, *%c) {
+        return self.new( cmyk => [ $c, $m, $y, $k ], |%c );
     }
 
-    multi method new (Real:D $r, Real:D $g, Real:D $b, ) {
-        return self.bless(:$r, :$g, :$b);
+    multi method new (Real:D $r, Real:D $g, Real:D $b, *%c ) {
+        return self.bless(:$r, :$g, :$b, |%c);
     }
 
-    multi method new (Real:D :$r, Real:D :$g, Real:D :$b, ) {
-        return self.bless(:$r, :$g, :$b);
+    multi method new (Real:D :$r, Real:D :$g, Real:D :$b, *%c) {
+        return self.bless(:$r, :$g, :$b, |%c);
     }
 
-    multi method new (Str:D $hex is copy where 8 <= .chars <= 9 ) {
-        return self.bless( :alpha-math, |parse-hex $hex );
+    multi method new (Str:D $hex is copy where 8 <= .chars <= 9, *%c) {
+        return self.bless( :alpha-math, |parse-hex $hex, |%c );
     }
 
-    multi method new (Str:D $hex is copy where 3 <= .chars <= 7 ) {
-        return self.bless( |parse-hex $hex );
+    multi method new (Str:D $hex is copy where 3 <= .chars <= 7, *%c) {
+        return self.bless( |parse-hex $hex, |%c );
     }
 
-    multi method new (Str:D :$hex) { return Color.new($hex); }
+    multi method new (Str:D :$hex, *%c) { return self.new($hex, |%c); }
 
-    multi method new ( Array() :$rgb where $_ ~~ [Real, Real, Real] ) {
+    multi method new ( Array() :$rgb where $_ ~~ [Real, Real, Real], *%c ) {
         clip-to 0, $_, 255 for @$rgb;
-        return self.bless( r => $rgb[0], g => $rgb[1], b => $rgb[2] );
+        return self.bless( r => $rgb[0], g => $rgb[1], b => $rgb[2], |%c );
     }
 
-    multi method new ( Array() :$rgbd where $_ ~~ [Real, Real, Real] ) {
+    multi method new ( Array() :$rgbd where $_ ~~ [Real, Real, Real], *%c ) {
         clip-to 0, $_, 1 for @$rgbd;
         return self.bless(
             r => $rgbd[0] * 255,
             g => $rgbd[1] * 255,
             b => $rgbd[2] * 255,
+            |%c
         );
     }
 
-    multi method new ( Array() :$rgba where $_ ~~ [Real, Real, Real, Real] ) {
+    multi method new ( Array() :$rgba where $_ ~~ [Real, Real, Real, Real], *%c ) {
         clip-to 0, $_, 255 for @$rgba;
         return self.bless(
             r => $rgba[0],
@@ -67,10 +68,11 @@ class Color:ver<1.002007>
             b => $rgba[2],
             a => $rgba[3],
             :alpha-math,
+            |%c
         );
     }
 
-    multi method new ( Array() :$rgbad where $_ ~~ [Real, Real, Real, Real] ) {
+    multi method new ( Array() :$rgbad where $_ ~~ [Real, Real, Real, Real], *%c ) {
         clip-to 0, $_, 1 for @$rgbad;
         return self.bless(
             r => $rgbad[0] * 255,
@@ -78,23 +80,24 @@ class Color:ver<1.002007>
             b => $rgbad[2] * 255,
             a => $rgbad[3] * 255,
             :alpha-math,
+            |%c
         );
     }
 
-    multi method new ( Array() :$cmyk where $_ ~~ [Real, Real, Real, Real] )
-    { return self.bless( |cmyk2rgb $cmyk ) }
+    multi method new ( Array() :$cmyk where $_ ~~ [Real, Real, Real, Real], *%c )
+    { return self.bless( |cmyk2rgb $cmyk, |%c ) }
 
-    multi method new ( Array() :$hsl where $_ ~~ [Real, Real, Real] )
-    { return self.bless( |hsl2rgb $hsl ) }
+    multi method new ( Array() :$hsl where $_ ~~ [Real, Real, Real], *%c )
+    { return self.bless( |hsl2rgb $hsl, |%c ) }
 
-    multi method new ( Array() :$hsla where $_ ~~ [Real, Real, Real, Real] )
-    { return self.bless( |hsla2rgba $hsla ) }
+    multi method new ( Array() :$hsla where $_ ~~ [Real, Real, Real, Real], *%c )
+    { return self.bless( |hsla2rgba $hsla, |%c ) }
 
-    multi method new ( Array() :$hsv where $_ ~~ [Real, Real, Real] )
-    { return self.bless( |hsv2rgb $hsv ) }
+    multi method new ( Array() :$hsv where $_ ~~ [Real, Real, Real], *%c )
+    { return self.bless( |hsv2rgb $hsv, |%c ) }
 
-    multi method new ( Array() :$hsva where $_ ~~ [Real, Real, Real, Real] )
-    { return self.bless( |hsva2rgba $hsva ) }
+    multi method new ( Array() :$hsva where $_ ~~ [Real, Real, Real, Real], *%c )
+    { return self.bless( |hsva2rgba $hsva, |%c ) }
 
     ##########################################################################
     # Methods
