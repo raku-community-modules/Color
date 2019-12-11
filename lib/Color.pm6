@@ -129,27 +129,27 @@ class Color:ver<1.002007>
 
     method darken  ( Real $Δ ) { return self.lighten(-$Δ); }
     method lighten ( Real $Δ ) {
-        my Color $c .= new( hsl => [lighten( |self.hsl, $Δ )]);
+        my Color $c = self.new( hsl => [lighten( |self.hsl, $Δ )]);
         $c.alpha($!a) unless $!a == 255;
         $c.alpha-math = $!alpha-math;
         $c
     }
     method desaturate ( Real $Δ ) { return self.saturate(-$Δ); }
     method saturate   ( Real $Δ ) {
-        my Color $c .= new( hsl => [saturate( |self.hsl, $Δ )]);
+        my Color $c = self.new( hsl => [saturate( |self.hsl, $Δ )]);
         $c.alpha($!a) unless $!a == 255;
         $c.alpha-math = $!alpha-math;
         $c
     }
     method invert () {
-        my Color $c .= new( 255-$.r, 255-$.g, 255-$.b );
+        my Color $c = self.new( 255-$.r, 255-$.g, 255-$.b );
         $c.alpha($!a) unless $!a == 255;
         $c.alpha-math = $!alpha-math;
         $c
     }
     method rotate( Real $α )
     {
-        my Color $c .= new( |rotate( $.r, $.g, $.b, $α ) );
+        my Color $c = self.new( |rotate( $.r, $.g, $.b, $α ) );
         $c.alpha($!a) unless $!a == 255;
         $c.alpha-math = $!alpha-math;
         $c
