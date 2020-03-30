@@ -1,7 +1,7 @@
 use v6;
 
 
-class Color:ver<1.002007>
+class Color:ver<1.002008>
 {
     use Color::Conversion;
     use Color::Utilities;

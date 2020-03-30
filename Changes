@@ -1,5 +1,9 @@
 Revision History for 'Color' Perl 6 Distribution
 
+1.002008  2020-03-30 (Vadim Belman - vrurg)
+  - Make class Color inheritable: bless the invokant class and preserve all
+    named parameters.
+
 1.002007  2019-11-15 (David Warring - dwarring)
   - Added hsla and hsva conversion formats. Both fairly trivial; they
     just carry an alpha channel.
