@@ -15,5 +15,5 @@
         "Color::Utilities" : "lib/Color/Utilities.pm6"
     },
     "authors"      : ["Zoffix Znet"],
-    "support"      : { "source" : "git://github.com/perl6-community-modules/Color.git" }
+    "support"      : { "source" : "git://github.com/raku-community-modules/Color.git" }
 }
