@@ -1,10 +1,7 @@
-#!perl6
-
-use v6;
 use Test;
-use lib 'lib';
 use Color;
-use Color::Operators;
+
+plan 5;
 
 diag 'Operator tests on rgb nums';
 subtest {
@@ -120,4 +117,4 @@ subtest {
     is-deeply ($c¡).rgba, $c.invert.rgba,        '¡ does .invert';
 }, 'unicode operators';
 
-done-testing;
+# vim: expandtab shiftwidth=4

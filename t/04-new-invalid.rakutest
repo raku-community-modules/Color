@@ -1,9 +1,7 @@
-#!perl6
-
-use v6;
 use Test;
-use lib 'lib';
 use Color;
+
+plan 7;
 
 subtest {
     dies-ok { Color.new('foobar') }, 'die on string instead of hex chars';
@@ -55,4 +53,4 @@ subtest {
         'die on too many colours';
 }, 'RGBA Tuple (decimal form)';
 
-done-testing;
+# vim: expandtab shiftwidth=4

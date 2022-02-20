@@ -1,9 +1,7 @@
-#!perl6
-
-use v6;
 use Test;
-use lib 'lib';
 use Color;
+
+plan 28;
 
 diag 'Short 3-hex';
 subtest {
@@ -270,4 +268,4 @@ subtest {
     is $c.a, 255, 'alpha is correct';
 }, ".new( :hsv<90 60 70> )";
 
-done-testing;
+# vim: expandtab shiftwidth=4

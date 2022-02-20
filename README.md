@@ -25,7 +25,7 @@ my $saturated_pink = Color.new('#ED60A2') 🞉 20; # same as above
 # Create an inverted colour scheme:
 $_ = .invert for @colours_in_my_colourscheme;
 
-use Color::Operators; # this gives us some ops to use on Color objects
+# Some ops to use on Color objects
 my $gray = $white / 2;
 say $gray.hex; # prints "#808080"
 say $almost_black + 25; # prints "42, 42, 42"
@@ -309,8 +309,6 @@ Converts the color to RGBA format ranging `0`..`1` and returns a list of the thr
 
 CUSTOM OPERATORS
 ================
-
-To get these, you need to `use Color::Operators` along with `use Color`.
 
 `+`
 ---

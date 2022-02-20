@@ -1,9 +1,7 @@
-#!perl6
-
-use v6;
 use Test;
-use lib 'lib';
 use Color;
+
+plan 6;
 
 subtest {
     my $c = Color.new( hex => '#0abcde');
@@ -90,4 +88,4 @@ subtest {
     is-deeply $c.invert, $c.rotate( 180 ), 'turning color wheel halfway around';
 }
 
-done-testing;
+# vim: expandtab shiftwidth=4

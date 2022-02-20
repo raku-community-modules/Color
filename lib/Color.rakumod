@@ -2,192 +2,249 @@ use Color::Conversion;
 use Color::Utilities;
 use Color::Manipulation;
 
-unit class Color:ver<1.003>:auth<zef:raku-community-modules>;
+class Color:ver<1.004>:auth<zef:raku-community-modules> {
+    subset ValidRGB of Real where 0 <= $_ <= 255;
 
-subset ValidRGB of Real where 0 <= $_ <= 255;
-
-has ValidRGB $.r = 0;
-has ValidRGB $.g = 0;
-has ValidRGB $.b = 0;
-has ValidRGB $.a = 255;
-has Bool $.alpha-math is rw = False;
+    has ValidRGB $.r = 0;
+    has ValidRGB $.g = 0;
+    has ValidRGB $.b = 0;
+    has ValidRGB $.a = 255;
+    has Bool $.alpha-math is rw = False;
 
 ##########################################################################
 # Call forms
 ##########################################################################
-proto method new(|) { * }
+    proto method new(|) { * }
 
-multi method new(Real:D :$r, Real:D :$g, Real:D :$b, Real:D :$a, *%c) {
-    self.bless: :$r, :$g, :$b, :$a, |%c
-}
+    multi method new(Real:D :$r, Real:D :$g, Real:D :$b, Real:D :$a, *%c) {
+        self.bless: :$r, :$g, :$b, :$a, |%c
+    }
 
-multi method new(Real:D $c, Real:D $m, Real:D $y, Real:D $k, *%c) {
-    self.new: cmyk => [ $c, $m, $y, $k ], |%c
-}
+    multi method new(Real:D $c, Real:D $m, Real:D $y, Real:D $k, *%c) {
+        self.new: cmyk => [ $c, $m, $y, $k ], |%c
+    }
 
-multi method new(Real:D $r, Real:D $g, Real:D $b, *%c ) {
-    self.bless: :$r, :$g, :$b, |%c
-}
+    multi method new(Real:D $r, Real:D $g, Real:D $b, *%c ) {
+        self.bless: :$r, :$g, :$b, |%c
+    }
 
-multi method new(Real:D :$r, Real:D :$g, Real:D :$b, *%c) {
-    self.bless: :$r, :$g, :$b, |%c
-}
+    multi method new(Real:D :$r, Real:D :$g, Real:D :$b, *%c) {
+        self.bless: :$r, :$g, :$b, |%c
+    }
 
-multi method new(Str:D $hex is copy where 8 <= .chars <= 9, *%c) {
-    self.bless: :alpha-math, |parse-hex $hex, |%c
-}
+    multi method new(Str:D $hex is copy where 8 <= .chars <= 9, *%c) {
+        self.bless: :alpha-math, |parse-hex $hex, |%c
+    }
 
-multi method new(Str:D $hex is copy where 3 <= .chars <= 7, *%c) {
-    self.bless: |parse-hex $hex, |%c
-}
+    multi method new(Str:D $hex is copy where 3 <= .chars <= 7, *%c) {
+        self.bless: |parse-hex $hex, |%c
+    }
 
-multi method new(Str:D :$hex, *%c) { self.new: $hex, |%c }
+    multi method new(Str:D :$hex, *%c) { self.new: $hex, |%c }
 
-multi method new(
-  Array() :$rgb where .defined && $_ ~~ [Real, Real, Real], *%c
-) {
-    clip-to 0, $_, 255 for @$rgb;
-    self.bless: r => $rgb[0], g => $rgb[1], b => $rgb[2], |%c
-}
+    multi method new(
+      Array() :$rgb where .defined && $_ ~~ [Real, Real, Real], *%c
+    ) {
+        clip-to 0, $_, 255 for @$rgb;
+        self.bless: r => $rgb[0], g => $rgb[1], b => $rgb[2], |%c
+    }
 
-multi method new(
-  Array() :$rgbd where .defined && $_ ~~ [Real, Real, Real], *%c
-) {
-    clip-to 0, $_, 1 for @$rgbd;
-    self.bless:
-      r => $rgbd[0] * 255,
-      g => $rgbd[1] * 255,
-      b => $rgbd[2] * 255,
-      |%c
-}
+    multi method new(
+      Array() :$rgbd where .defined && $_ ~~ [Real, Real, Real], *%c
+    ) {
+        clip-to 0, $_, 1 for @$rgbd;
+        self.bless:
+          r => $rgbd[0] * 255,
+          g => $rgbd[1] * 255,
+          b => $rgbd[2] * 255,
+          |%c
+    }
 
-multi method new(
-  Array() :$rgba where .defined && $_ ~~ [Real, Real, Real, Real], *%c
-) {
-    clip-to 0, $_, 255 for @$rgba;
-    self.bless:
-      r => $rgba[0],
-      g => $rgba[1],
-      b => $rgba[2],
-      a => $rgba[3],
-      :alpha-math,
-      |%c
-}
+    multi method new(
+      Array() :$rgba where .defined && $_ ~~ [Real, Real, Real, Real], *%c
+    ) {
+        clip-to 0, $_, 255 for @$rgba;
+        self.bless:
+          r => $rgba[0],
+          g => $rgba[1],
+          b => $rgba[2],
+          a => $rgba[3],
+          :alpha-math,
+          |%c
+    }
 
-multi method new(
-  Array() :$rgbad where .defined && $_ ~~ [Real, Real, Real, Real], *%c
-) {
-    clip-to 0, $_, 1 for @$rgbad;
-    self.bless:
-      r => $rgbad[0] * 255,
-      g => $rgbad[1] * 255,
-      b => $rgbad[2] * 255,
-      a => $rgbad[3] * 255,
-      :alpha-math,
-      |%c
-}
+    multi method new(
+      Array() :$rgbad where .defined && $_ ~~ [Real, Real, Real, Real], *%c
+    ) {
+        clip-to 0, $_, 1 for @$rgbad;
+        self.bless:
+          r => $rgbad[0] * 255,
+          g => $rgbad[1] * 255,
+          b => $rgbad[2] * 255,
+          a => $rgbad[3] * 255,
+          :alpha-math,
+          |%c
+    }
 
-multi method new(
-  Array() :$cmyk where .defined && $_ ~~ [Real, Real, Real, Real], *%c
-) {
-    self.bless: |cmyk2rgb $cmyk, |%c
-}
+    multi method new(
+      Array() :$cmyk where .defined && $_ ~~ [Real, Real, Real, Real], *%c
+    ) {
+        self.bless: |cmyk2rgb $cmyk, |%c
+    }
 
-multi method new(
-  Array() :$hsl where .defined && $_ ~~ [Real, Real, Real], *%c
-) {
-    self.bless: |hsl2rgb $hsl, |%c
-}
+    multi method new(
+      Array() :$hsl where .defined && $_ ~~ [Real, Real, Real], *%c
+    ) {
+        self.bless: |hsl2rgb $hsl, |%c
+    }
 
-multi method new(
-  Array() :$hsla where .defined && $_ ~~ [Real, Real, Real, Real], *%c
-) {
-    self.bless: |hsla2rgba $hsla, |%c
-}
+    multi method new(
+      Array() :$hsla where .defined && $_ ~~ [Real, Real, Real, Real], *%c
+    ) {
+        self.bless: |hsla2rgba $hsla, |%c
+    }
 
-multi method new(Array() :$hsv where .defined && $_ ~~ [Real, Real, Real], *%c
-) {
-    self.bless: |hsv2rgb $hsv, |%c
-}
+    multi method new(Array() :$hsv where .defined && $_ ~~ [Real, Real, Real], *%c
+    ) {
+        self.bless: |hsv2rgb $hsv, |%c
+    }
 
-multi method new(
-  Array() :$hsva where .defined && $_ ~~ [Real, Real, Real, Real], *%c
-) {
-    self.bless: |hsva2rgba $hsva, |%c
-}
+    multi method new(
+      Array() :$hsva where .defined && $_ ~~ [Real, Real, Real, Real], *%c
+    ) {
+        self.bless: |hsva2rgba $hsva, |%c
+    }
 
 ##########################################################################
 # Methods
 ##########################################################################
-method cmyk()  { rgb2cmyk  $.r, $.g, $.b }
-method hsl()   { rgb2hsl   $.r, $.g, $.b }
-method hsla()  { rgba2hsla $.r, $.g, $.b, $.a }
-method hsv()   { rgb2hsv   $.r, $.g, $.b }
-method hsva()  { rgba2hsva $.r, $.g, $.b, $.a }
-method rgb()   { map { .round }, $.r, $.g, $.b      }
-method rgba()  { map { .round }, $.r, $.g, $.b, $.a }
-method rgbd()  { $.r/255, $.g/255, $.b/255           }
-method rgbad() { $.r/255, $.g/255, $.b/255, $.a/255  }
-method hex()   { ($.r, $.g, $.b).map: *.fmt('%02X') }
+    method cmyk()  { rgb2cmyk  $.r, $.g, $.b }
+    method hsl()   { rgb2hsl   $.r, $.g, $.b }
+    method hsla()  { rgba2hsla $.r, $.g, $.b, $.a }
+    method hsv()   { rgb2hsv   $.r, $.g, $.b }
+    method hsva()  { rgba2hsva $.r, $.g, $.b, $.a }
+    method rgb()   { map { .round }, $.r, $.g, $.b      }
+    method rgba()  { map { .round }, $.r, $.g, $.b, $.a }
+    method rgbd()  { $.r/255, $.g/255, $.b/255           }
+    method rgbad() { $.r/255, $.g/255, $.b/255, $.a/255  }
+    method hex()   { ($.r, $.g, $.b).map: *.fmt('%02X') }
 
-method hex3() {
-    # Round the hex; the 247 bit is so we don't get hex 100 for high RGBs
-    ($.r, $.g, $.b).map: {
-        ($_ min 247).round(16).base(16).substr(0,1)
-    }
-}
-method hex4() {
-    # Round the hex; the 247 bit is so we don't get hex 100 for high RGBs
-    ($.r, $.g, $.b, $.a).map: {
-        ($_ min 247).round(16).base(16).substr(0,1)
-    }
-}
-method hex8() { ($.r, $.g, $.b, $.a).map: *.fmt('%02X') }
-
-method darken(Real $Δ) { self.lighten(-$Δ); }
-method lighten(Real $Δ) {
-    my Color $c := self.new: hsl => [lighten( |self.hsl, $Δ )];
-    $c.alpha($!a) unless $!a == 255;
-    $c.alpha-math = $!alpha-math;
-    $c
-}
-method desaturate(Real $Δ) { self.saturate(-$Δ) }
-method saturate(Real $Δ) {
-    my Color $c := self.new: hsl => [saturate( |self.hsl, $Δ )];
-    $c.alpha($!a) unless $!a == 255;
-    $c.alpha-math = $!alpha-math;
-    $c
-}
-method invert() {
-    my Color $c := self.new: 255-$.r, 255-$.g, 255-$.b;
-    $c.alpha($!a) unless $!a == 255;
-    $c.alpha-math = $!alpha-math;
-    $c
-}
-method rotate(Real $α) {
-    my Color $c := self.new: |rotate $.r, $.g, $.b, $α;
-    $c.alpha($!a) unless $!a == 255;
-    $c.alpha-math = $!alpha-math;
-    $c
-}
-
-method to-string(Str $type = 'hex') {
-    do given $type {
-        when m:i/^ hex \d? $/ { '#' ~ self."$type"().join('') }
-        when m:i/^ [ rgba?d? | cmyk | hs<[vl]>a? ] $/ {
-            ( my $out_type = $type ) ~~ s/d$//;
-            "$out_type\(" ~ self."$type"().join(", ") ~ ")"
+    method hex3() {
+        # Round the hex; the 247 bit is so we don't get hex 100 for high RGBs
+        ($.r, $.g, $.b).map: {
+            ($_ min 247).round(16).base(16).substr(0,1)
         }
-        when * { fail "Invalid format ($type) to convert to specified"; }
     }
-}
+    method hex4() {
+        # Round the hex; the 247 bit is so we don't get hex 100 for high RGBs
+        ($.r, $.g, $.b, $.a).map: {
+            ($_ min 247).round(16).base(16).substr(0,1)
+        }
+    }
+    method hex8() { ($.r, $.g, $.b, $.a).map: *.fmt('%02X') }
+
+    method darken(Real $Δ) { self.lighten(-$Δ); }
+    method lighten(Real $Δ) {
+        my Color $c := self.new: hsl => [lighten( |self.hsl, $Δ )];
+        $c.alpha($!a) unless $!a == 255;
+        $c.alpha-math = $!alpha-math;
+        $c
+    }
+    method desaturate(Real $Δ) { self.saturate(-$Δ) }
+    method saturate(Real $Δ) {
+        my Color $c := self.new: hsl => [saturate( |self.hsl, $Δ )];
+        $c.alpha($!a) unless $!a == 255;
+        $c.alpha-math = $!alpha-math;
+        $c
+    }
+    method invert() {
+        my Color $c := self.new: 255-$.r, 255-$.g, 255-$.b;
+        $c.alpha($!a) unless $!a == 255;
+        $c.alpha-math = $!alpha-math;
+        $c
+    }
+    method rotate(Real $α) {
+        my Color $c := self.new: |rotate $.r, $.g, $.b, $α;
+        $c.alpha($!a) unless $!a == 255;
+        $c.alpha-math = $!alpha-math;
+        $c
+    }
+
+    method to-string(Str $type = 'hex') {
+        do given $type {
+            when m:i/^ hex \d? $/ { '#' ~ self."$type"().join('') }
+            when m:i/^ [ rgba?d? | cmyk | hs<[vl]>a? ] $/ {
+                ( my $out_type = $type ) ~~ s/d$//;
+                "$out_type\(" ~ self."$type"().join(", ") ~ ")"
+            }
+            when * { fail "Invalid format ($type) to convert to specified"; }
+        }
+    }
 
 # MARTIMM: better methods to get and set alpha channel
-multi method alpha(ValidRGB $alpha) { $!a = $alpha; $!alpha-math = True }
-multi method alpha() { $!a }
+    multi method alpha(ValidRGB $alpha) { $!a = $alpha; $!alpha-math = True }
+    multi method alpha() { $!a }
 
-method gist { self.to-string('hex') }
-method Str  { self.to-string('hex') }
+    method gist { self.to-string('hex') }
+    method Str  { self.to-string('hex') }
+}
+
+##########################################################################
+# Operators
+##########################################################################
+multi infix:<+>(Color $c1, Real  $c2) is export { Color.new(|op $c1, $c2, '+') }
+multi infix:<+>(Real  $c1, Color $c2) is export { Color.new(|op $c1, $c2, '+') }
+multi infix:<+>(Color $c1, Color $c2) is export { Color.new(|op $c1, $c2, '+') }
+multi infix:<->(Color $c1, Real  $c2) is export { Color.new(|op $c1, $c2, '-') }
+multi infix:<->(Real  $c1, Color $c2) is export { Color.new(|op $c1, $c2, '-') }
+multi infix:<->(Color $c1, Color $c2) is export { Color.new(|op $c1, $c2, '-') }
+multi infix:<*>(Color $c1, Real  $c2) is export { Color.new(|op $c1, $c2, '*') }
+multi infix:<*>(Real  $c1, Color $c2) is export { Color.new(|op $c1, $c2, '*') }
+multi infix:<*>(Color $c1, Color $c2) is export { Color.new(|op $c1, $c2, '*') }
+multi infix:</>(Color $c1, Real  $c2) is export { Color.new(|op $c1, $c2, '/') }
+multi infix:</>(Real  $c1, Color $c2) is export { Color.new(|op $c1, $c2, '/') }
+multi infix:</>(Color $c1, Color $c2) is export { Color.new(|op $c1, $c2, '/') }
+multi infix:<◐>(Color $c1, Real:D $Δ) is export { $c1.lighten($Δ) }
+multi infix:<◑>(Color $c1, Real:D $Δ) is export { $c1.darken($Δ) }
+multi infix:<🞅>(Color $c1, Real:D $Δ) is export { $c1.desaturate($Δ) }
+multi infix:<🞉>(Color $c1, Real:D $Δ) is export { $c1.saturate($Δ) }
+multi postfix:<¡>(Color $c1) is export { $c1.invert }
+
+##############################################################################
+# Operator helpers
+##############################################################################
+
+my sub op($obj1, $obj2, Str:D $op) {
+    my %r;
+    for <r g b> {
+        my $v1 = $obj1 ~~ Color ?? $obj1."$_"() !! $obj1;
+        my $v2 = $obj2 ~~ Color ?? $obj2."$_"() !! $obj2;
+        %r{$_} = ::('&infix:<' ~ $op ~ '>')($v1, $v2);
+        %r{$_} = 0 if $op eq '/' and $v2 == 0;
+    }
+
+    %r<a> = $obj1 ~~ Color ?? $obj1.a !! $obj2.a;
+    if $obj1.?alpha-math or $obj2.?alpha-math {
+        %r<a> = ::('&infix:<' ~$op~ '>')($obj1.?a // $obj1, $obj2.?a // $obj2);
+        %r<a> = 0
+          if $op eq '/' and ( $obj2 ~~ Color ?? $obj2.a == 0 !! $obj2 == 0 );
+    }
+
+    clip-to 0, $_, 255 for values %r;
+    %r
+}
+
+# See conversion formulas for CMYK and others here:
+# http://www.rapidtables.com/convert/color/cmyk-to-rgb.htm
+
+# ◐	9680	25D0	 	CIRCLE WITH LEFT HALF BLACK
+# ◑	9681	25D1	 	CIRCLE WITH RIGHT HALF BLACK
+# U+1F789 	🞉  EXTREMELY HEAVY WHITE CIRCLE
+# U+1F785 	🞅 	f0 9f 9e 85 	MEDIUM BOLD WHITE CIRCLE
+# 0xA1 ¡  	INVERTED EXCLAMATION MARK
+# my $lighter = RGB.new('ccc') ◐ 10;
+# my $lighter = RGB.new('ccc') ◑ 10;
+# my $lighter = RGB.new('ccc') + 22.5;
 
 =begin pod
 
@@ -215,7 +272,7 @@ my $saturated_pink = Color.new('#ED60A2') 🞉 20; # same as above
 # Create an inverted colour scheme:
 $_ = .invert for @colours_in_my_colourscheme;
 
-use Color::Operators; # this gives us some ops to use on Color objects
+# Some ops to use on Color objects
 my $gray = $white / 2;
 say $gray.hex; # prints "#808080"
 say $almost_black + 25; # prints "42, 42, 42"
@@ -551,8 +608,6 @@ Converts the color to RGBA format ranging C<0>..C<1> and returns a list of
 the three colours, and alpha channel.
 
 =head1 CUSTOM OPERATORS
-
-To get these, you need to C<use Color::Operators> along with C<use Color>.
 
 =head2 C<+>
 

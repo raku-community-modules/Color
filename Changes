@@ -2,6 +2,10 @@ Revision history for Color
 
 {{$NEXT}}
 
+1.004  2022-02-20T15:35:37+01:00
+    - Operators are now exported by default
+    - Also tighten up the tests a bit with plans!
+
 1.003  2022-02-20T15:09:41+01:00
     - First version in the zef ecosystem
 

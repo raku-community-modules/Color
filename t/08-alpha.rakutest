@@ -1,12 +1,9 @@
-#!perl6
-
-use v6;
 use Test;
-use lib 'lib';
 use Color;
 
-diag 'Tests on alpha channel behavior';
+plan 2;
 
+diag 'Tests on alpha channel behavior';
 subtest {
 
   my Color $color .= new('#ff0000');
@@ -44,5 +41,4 @@ subtest {
 
 }, 'Test follow alpha on darken, saturate etc';
 
-
-done-testing;
+# vim: expandtab shiftwidth=4
