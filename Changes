@@ -2,6 +2,9 @@ Revision history for Color
 
 {{$NEXT}}
 
+1.004001  2022-02-20T15:45:24+01:00
+    - Remove now incorrect mention of Color::Operators
+
 1.004  2022-02-20T15:35:37+01:00
     - Operators are now exported by default
     - Also tighten up the tests a bit with plans!

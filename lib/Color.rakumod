@@ -2,7 +2,7 @@ use Color::Conversion;
 use Color::Utilities;
 use Color::Manipulation;
 
-class Color:ver<1.004>:auth<zef:raku-community-modules> {
+class Color:ver<1.004001>:auth<zef:raku-community-modules> {
     subset ValidRGB of Real where 0 <= $_ <= 255;
 
     has ValidRGB $.r = 0;
@@ -284,19 +284,6 @@ say $almost_black + 25; # prints "42, 42, 42"
 This module allows you to perform mathematical operations on RGB color tuples,
 as well as convert them into other color formats, like hex, and manipulate
 them by, for example, making them lighter, darker, or more or less saturated.
-
-=head1 OPERATORS
-
-=begin code :lang<raku>
-
-use Color;
-use Color::Operators;
-
-=end code
-
-Note: as of this writing (Nov 17, 2015), merely importing the operators
-made Rakudo compile 20 seconds slower, hence the operators are in a
-separate module that you'll need to import.
 
 =head1 CONSTRUCTOR
 
@@ -607,7 +594,7 @@ say $c.rgbad; # (<2/51>, <188/255>, <74/85>, 1.0)
 Converts the color to RGBA format ranging C<0>..C<1> and returns a list of
 the three colours, and alpha channel.
 
-=head1 CUSTOM OPERATORS
+=head1 OPERATORS
 
 =head2 C<+>
 

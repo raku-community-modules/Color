@@ -36,16 +36,6 @@ DESCRIPTION
 
 This module allows you to perform mathematical operations on RGB color tuples, as well as convert them into other color formats, like hex, and manipulate them by, for example, making them lighter, darker, or more or less saturated.
 
-OPERATORS
-=========
-
-```raku
-use Color;
-use Color::Operators;
-```
-
-Note: as of this writing (Nov 17, 2015), merely importing the operators made Rakudo compile 20 seconds slower, hence the operators are in a separate module that you'll need to import.
-
 CONSTRUCTOR
 ===========
 
@@ -307,8 +297,8 @@ say $c.rgbad; # (<2/51>, <188/255>, <74/85>, 1.0)
 
 Converts the color to RGBA format ranging `0`..`1` and returns a list of the three colours, and alpha channel.
 
-CUSTOM OPERATORS
-================
+OPERATORS
+=========
 
 `+`
 ---
