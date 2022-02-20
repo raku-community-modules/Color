@@ -1,21 +1,24 @@
-Revision History for 'Color' Perl 6 Distribution
+Revision history for Color
+
+{{$NEXT}}
+    - First version in the zef ecosystem
 
 1.002008  2020-03-30 (Vadim Belman - vrurg)
-  - Make class Color inheritable: bless the invokant class and preserve all
-    named parameters.
+    - Make class Color inheritable: bless the invokant class and preserve all
+      named parameters.
 
 1.002007  2019-11-15 (David Warring - dwarring)
-  - Added hsla and hsva conversion formats. Both fairly trivial; they
-    just carry an alpha channel.
+    - Added hsla and hsva conversion formats. Both fairly trivial; they
+      just carry an alpha channel.
 
 1.002005  2017-12-06 (by Marcel Timmerman - MARTIMM on github)
-  - Added .alpha method to get and set alpha channel
-  - Modified lighten, darken, (de)saturate, invert and rotate to return the
-    color with the transparency level of the input color. The attribute alpha-math
-    is copied as well.
+    - Added .alpha method to get and set alpha channel
+    - Modified lighten, darken, (de)saturate, invert and rotate to return the
+      color with the transparency level of the input color. The attribute alpha-math
+      is copied as well.
 
 1.002001  2015-12-06
-  - Added .hex4 method (#1)
+    - Added .hex4 method (#1)
 
 1.001001  2015-11-16
-  - First version released on an unsuspecting world
+    - First version released on an unsuspecting world
