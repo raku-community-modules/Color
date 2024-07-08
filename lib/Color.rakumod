@@ -11,6 +11,83 @@ class Color:ver<1.004001>:auth<zef:raku-community-modules> {
     has ValidRGB $.a = 255;
     has Bool $.alpha-math is rw = False;
 
+    method h is rw {
+      Proxy.new:
+        FETCH => -> $     { self.hsv.head },
+        STORE => -> $, \h {
+          my $hsv = self.hsv;
+          $hsv[0] = h;
+
+          ($!r, $!g, $!b) = (hsv2rgb $hsv)<r g b>».Int;
+        }
+    }
+
+    method s is rw {
+      Proxy.new:
+        FETCH => -> $     { self.hsv[1] },
+        STORE => -> $, \s {
+          my $hsv = self.hsv;
+          $hsv[1] = s;
+
+          ($!r, $!g, $!b) = (hsv2rgb $hsv)<r g b>».Int;
+        }
+    }
+
+    method v is rw {
+      Proxy.new:
+        FETCH => -> $     { self.hsv.tail },
+        STORE => -> $, \v {
+          my $hsv = self.hsv;
+          $hsv[2] = v;
+
+          ($!r, $!g, $!b) = (hsv2rgb $hsv)<r g b>».Int;
+        }
+    }
+
+    method c is rw {
+      Proxy.new:
+        FETCH => -> $     { self.cmyk.head },
+        STORE => -> $, \c {
+          my $cmyk = self.cmyk.Array;
+          $cmyk[0] = c;
+
+          ($!r, $!g, $!b) = (cmyk2rgb $cmyk)<r g b>».Int;
+        }
+    }
+
+    method m is rw {
+      Proxy.new:
+        FETCH => -> $     { self.cmyk[1] },
+        STORE => -> $, \mg {
+          my $cmyk = self.cmyk.Array;
+          $cmyk[1] = mg;
+
+          ($!r, $!g, $!b) = (cmyk2rgb $cmyk)<r g b>».Int;
+        }
+    }
+
+    method y is rw {
+      Proxy.new:
+        FETCH => -> $     { self.cmyk[2] },
+        STORE => -> $, \y {
+          my $cmyk = self.cmyk.Array;
+          $cmyk[2] = y;
+
+          ($!r, $!g, $!b) = (cmyk2rgb $cmyk)<r g b>».Int;
+        }
+    }
+
+    method k is rw {
+      Proxy.new:
+        FETCH => -> $     { self.cmyk[3] },
+        STORE => -> $, \k {
+          my $cmyk = self.cmyk.Array;
+          $cmyk[3] = k;
+
+          ($!r, $!g, $!b) = (cmyk2rgb $cmyk)<r g b>».Int;
+        }
+    }
+
 ##########################################################################
 # Call forms
 ##########################################################################
@@ -128,6 +205,15 @@ class Color:ver<1.004001>:auth<zef:raku-community-modules> {
     method rgbd()  { $.r/255, $.g/255, $.b/255           }
     method rgbad() { $.r/255, $.g/255, $.b/255, $.a/255  }
     method hex()   { ($.r, $.g, $.b).map: *.fmt('%02X') }
+
+    method Int {
+      [+](
+        $.r +< 24,
+        $.g +< 16,
+        $.b +< 8,
+        $.a
+      );
+    }
 
     method hex3() {
         # Round the hex; the 247 bit is so we don't get hex 100 for high RGBs
@@ -706,6 +792,16 @@ say "$c";
 
 The C<Color> object overrides C<.Str> and C<.gist> methods to be
 equivalent to C<.to-string('hex')>.
+
+=head1 Integer coercion
+
+=begin code :lang<raku>
+
+say $c.Int
+
+=end code
+
+Returns the integer representation of the Color in RGBA form.
 
 =head1 Functional interface
 
